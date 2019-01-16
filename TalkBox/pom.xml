@@ -16,4 +16,12 @@
       </plugin>
     </plugins>
   </build>
+  
+ <dependencies>
+ <dependency>
+  <groupId>uk.ac.abdn</groupId>
+  <artifactId>SimpleNLG</artifactId>
+  <version>4.4.8</version>
+</dependency>
+ </dependencies>
 </project>
