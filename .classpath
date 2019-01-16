@@ -2,5 +2,6 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path="TalkBox/src"/>
+	<classpathentry kind="lib" path="C:/Users/mattw/Documents/GitHub/simplenlg-v4.4.8/SimpleNLG-4.4.8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
