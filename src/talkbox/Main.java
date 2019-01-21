@@ -16,18 +16,7 @@ public class Main extends Application  {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-    	
-    	
-    	//ideas for library
-    	//SUBJECT: I, you, we, they
-    	//VERB:
-    	//OBJECT:
-    	
-		Word w1 = new Word(Part_Of_Speech.Compliment, Phrase_Type.Noun, "forever");
-		Word w2 = new Word(Part_Of_Speech.Indirect_Object, Phrase_Type.Noun, " the monkey");
-		Word w3 = new Word(Part_Of_Speech.Subject, Phrase_Type.Noun, "me");
-		Word w4 = new Word(Part_Of_Speech.Verb, Phrase_Type.Verb, "chase");
-		
+    
 		Sentence newPhrase = new Sentence();
     	
         primaryStage.setTitle("TalkBox Experiment 1");
@@ -46,7 +35,7 @@ public class Main extends Application  {
         });
         
         ComboBox<String> cb2 = new ComboBox<String>(FXCollections.observableArrayList(
-        		"eat", "sleep", "run", "walk", "drive", "go")
+        		"hungry", "sleep", "run", "walk", "drive", "go")
         );
         cb2.setPromptText("Set Subject");
         cb2.setOnAction( value -> {
@@ -88,24 +77,3 @@ public class Main extends Application  {
         Application.launch(args);
     }
 }
-
-//public class Main {
-//
-//	public static void main(String[] args) {
-//		
-//		Word w1 = new Word(Part_Of_Speech.Object, Phrase_Type.Noun, "food");
-//		Word w2 = new Word(Part_Of_Speech.Verb, Phrase_Type.Verb, "want");
-//		Word w3 = new Word(Part_Of_Speech.Subject, Phrase_Type.Noun, "I");
-//		
-//		Sentence newPhrase = new Sentence();
-//		newPhrase.addWord(w1);
-//		newPhrase.addWord(w2);
-//		newPhrase.addWord(w3);
-//		newPhrase.setTense(Tense.FUTURE);
-//		newPhrase.setQuestion(false);
-//		//ideally the buttons would modify the sentence object by adding words and setting tense/questions.
-//		
-//		System.out.println(newPhrase.getConstructedScentence());
-//	}
-//
-//}
