@@ -1,9 +1,10 @@
 package talkbox;
+
 public class Word {
 	
-	Part_Of_Speech partOfSpeech;
-	Phrase_Type phraseType;
-	String content;
+	private Part_Of_Speech partOfSpeech;
+	private Phrase_Type phraseType;
+	private String content;
 	
 	Word(Part_Of_Speech partOfSpeech, Phrase_Type phraseType, String content) {
 		this.partOfSpeech = partOfSpeech;
@@ -11,12 +12,12 @@ public class Word {
 		this.content = content;
 	}
 	
-	public String getPartOfSpeech() {
-		return this.partOfSpeech.toString();
+	public Part_Of_Speech getPartOfSpeech() {
+		return this.partOfSpeech;
 	}
 	
-	public String getPhraseType() {
-		return this.phraseType.toString();
+	public Phrase_Type getPhraseType() {
+		return this.phraseType;
 	}
 	
 	public String getContent() {

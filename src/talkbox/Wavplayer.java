@@ -1,4 +1,3 @@
-package talkbox;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.sound.sampled.AudioInputStream;
@@ -14,8 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Wavplayer extends JFrame { 
-	private static final long serialVersionUID = 7526472295622776147L;  // unique id
-    JButton btn = new JButton("Press to Play Sound");
+	private static final long serialVersionUID = 1L;//or some long
+    JButton btn = new JButton("Play Sound");
     File wavFile;
     URL defaultSound;
     public static Clip clip;
@@ -41,7 +40,7 @@ public class Wavplayer extends JFrame {
                 }
             });
         } catch (MalformedURLException ex) {
-            Logger.getLogger(Wavplayer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WavPlayer.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -67,7 +66,7 @@ public class Wavplayer extends JFrame {
     }
 
     public static void main(String args[]) {
-        Wavplayer t = new Wavplayer("file:Desktop/sounds/0.mp3");
+        Wavplayer t = new Wavplayer("file:/Users/Skilzer/Desktop/A-Z.wav");
         t.setVisible(true);
 
     }

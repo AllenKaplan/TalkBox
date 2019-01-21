@@ -25,4 +25,11 @@
 >>>>>>> refs/remotes/origin/stable
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/talkbox/A-Z.wav</name>
+			<type>1</type>
+			<location>/Users/Skilzer/Desktop/A-Z.wav</location>
+		</link>
+	</linkedResources>
 </projectDescription>
