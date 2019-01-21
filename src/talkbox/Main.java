@@ -13,6 +13,7 @@ public class Main {
 		newPhrase.addWord(w3);
 //		newPhrase.addWord(w4);
 //		newPhrase.addWord(w5);
+		//test
 		
 		System.out.println(newPhrase.getConstructedScentence());
 	}
