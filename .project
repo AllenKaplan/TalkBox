@@ -20,4 +20,11 @@
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/talkbox/A-Z.wav</name>
+			<type>1</type>
+			<location>/Users/Skilzer/Desktop/A-Z.wav</location>
+		</link>
+	</linkedResources>
 </projectDescription>
