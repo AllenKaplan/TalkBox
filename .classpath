@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
@@ -18,3 +19,12 @@
 	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="TalkBox/src"/>
+	<classpathentry kind="lib" path="C:/Users/mattw/Documents/GitHub/simplenlg-v4.4.8/SimpleNLG-4.4.8.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
+>>>>>>> refs/remotes/origin/stable
