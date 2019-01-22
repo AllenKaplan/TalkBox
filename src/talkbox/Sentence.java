@@ -21,7 +21,6 @@ public class Sentence {
 	private Tense tense;
 	
 	private boolean question;
-	private String typeOfQuestion;
 	
 	Sentence() {
 		this.words = new ArrayList<Word>();
@@ -40,10 +39,6 @@ public class Sentence {
 	
 	public void setTense(Tense tense) {
 		this.tense = tense;
-	}
-	
-	public void setTypeOfQuestion(String type) {
-		this.typeOfQuestion = type;
 	}
 	
 	public void rotateTense() {

@@ -15,6 +15,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import marytts.LocalMaryInterface;
 import marytts.MaryInterface;
@@ -32,8 +33,6 @@ public class Main extends Application  {
 		Sentence newPhrase = new Sentence();
 		
         primaryStage.setTitle("TalkBox Experiment 1");
-        primaryStage.setHeight(400);
-        primaryStage.setWidth(1000);
 
         Label label1 = new Label(" ");
         label1.setText("\"" + newPhrase.getConstructedScentence() + "\"");
@@ -97,10 +96,13 @@ public class Main extends Application  {
 			}
         });
         
-        HBox hbox = new HBox(cb1, cb2, cb3, button6, button7, button8, label1);
+        HBox hbox = new HBox(cb1, cb2, cb3, button6, button7, button8);
+        VBox vbox = new VBox(label1, hbox);
+   
 
-        Scene scene = new Scene(hbox, 400, 100);
+        Scene scene = new Scene(vbox);
         primaryStage.setScene(scene);
+        primaryStage.sizeToScene();
         primaryStage.show();
         
         
