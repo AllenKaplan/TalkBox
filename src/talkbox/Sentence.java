@@ -11,17 +11,22 @@ import simplenlg.phrasespec.*;
 import java.util.ArrayList;
 
 public class Sentence {
-
-	ArrayList<Word> words;
 	
+	//SimpleNLG attributes
 	private Lexicon lexicon;
 	private NLGFactory nlgFactory;
 	private Realiser realiser;
 	
+	//Other atttributes
+	ArrayList<Word> words;
 	private Tense tense;
-	
 	private boolean question;
 	
+	/*
+	 * Generates a new Sentence object and declares the class attributes to defaults
+	 * 
+	 * Defaults: Empty word arraylist, Tense = Present, Question = false;
+	 */
 	Sentence() {
 		this.words = new ArrayList<Word>();
 		
@@ -63,27 +68,28 @@ public class Sentence {
 		SPhraseSpec p = nlgFactory.createClause();
 		for (Word w: words) {
 			switch (w.getPartOfSpeech()) {
-			case Subject:
-				p.setSubject(w.getContent());
-				break;
-			case Verb:
-				p.setVerb(w.getContent());
-				break;
-			case Object:
-				p.setObject(w.getContent());
-				break;
-			case Compliment:
-				p.setComplement(w.getContent());
-				break;
-			case Indirect_Object:
-				p.setIndirectObject(w.getContent());
-				break;
-			default:
-				break;
+				case Subject:
+					p.setSubject(w.getContent());
+					break;
+				case Verb:
+					p.setVerb(w.getContent());
+					break;
+				case Object:
+					p.setObject(w.getContent());
+					break;
+				case Compliment:
+					p.setComplement(w.getContent());
+					break;
+				case Indirect_Object:
+					p.setIndirectObject(w.getContent());
+					break;
+				default:
+					break;
 			}
 		}
-		p.setFeature(Feature.TENSE, this.tense);
 		
+		//set features
+		p.setFeature(Feature.TENSE, this.tense);
 		if (this.question)
 			p.setFeature(Feature.INTERROGATIVE_TYPE, InterrogativeType.YES_NO);
 		
