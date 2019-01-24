@@ -24,9 +24,6 @@ import marytts.exceptions.SynthesisException;
 
 public class Main extends Application implements TalkBoxConfiguration {
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = -7803131998105179478L;
 
 	@Override
@@ -37,16 +34,15 @@ public class Main extends Application implements TalkBoxConfiguration {
     	};
     	
     	final String[] OBJECTS = {
-        		"me", "you", "they", "the washroom", "home", "the food", "a present"//the vs. for?
+        		"me", "you", "they", "the washroom", "home", "the food", "a present", "dank kush"//the vs. for?
         };
     	
     	final String[] VERBS = {
-        		"go", "eat", "sleep", "use", "buy" //go vs go to?
+        		"go", "eat", "sleep", "use", "buy", "smoke"  //go vs go to?
         };
     	
     	MaryInterface marytts = new LocalMaryInterface();
 		Sentence newPhrase = new Sentence();
-		
 		
 		/*element generation*/
         Label label1 = new Label(" ");
