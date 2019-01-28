@@ -3,6 +3,9 @@ package talkbox;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -24,14 +27,12 @@ import marytts.MaryInterface;
 import marytts.exceptions.MaryConfigurationException;
 import marytts.exceptions.SynthesisException;
 
-public class Main extends Application implements TalkBoxConfiguration {
-
-	private static final long serialVersionUID = -7803131998105179478L;
+public class Simulator extends Application{
 	
 	//talk box interface attributes
-	private int numOfAudioButtons, numOfAudioSets, numOfTotalButtons;
-	private String[][] audioFileNames;
-	private Path audioPath;
+	List<String> subjects = new ArrayList<String>();
+	List<String> objects = new ArrayList<String>();
+	List<String> verbs = new ArrayList<String>();
 	
 	//SimpleNLG interface
 	private static MaryInterface marytts;
@@ -39,44 +40,40 @@ public class Main extends Application implements TalkBoxConfiguration {
 	
 	@Override
     public void start(Stage primaryStage) throws Exception {
-    	
-    	final String[] SUBJECTS = {
-    			"me", "you", "they"
-    	};
-    	
-    	final String[] OBJECTS = {
-        		"me", "you", "they", "the washroom", "home", "the food", "a present" //the vs. for?
-        };
-    	
-    	final String[] VERBS = {
-        		"go", "eat", "sleep", "use", "buy","refuel" //go vs go to?
-        };
+		newPhrase = new Sentence();
+		marytts = new LocalMaryInterface();
 		
-		numOfAudioButtons = 1;
-		numOfAudioSets = (int) (Main.choose(SUBJECTS.length, 1) * Main.choose(OBJECTS.length, 1) * Main.choose(VERBS.length, 1)); //3c1 * 
-		numOfTotalButtons = 6;
-		audioPath = Paths.get("/audiofiles");
-		audioFileNames = null;
+//    	subjects = Arrays.asList(
+//    			"me", "you", "they"
+//    	);
+//    	
+//    	objects = Arrays.asList(
+//        		"me", "you", "they", "the washroom", "home", "the food", "a present" //the vs. for?
+//        );
+//    	
+//    	verbs = Arrays.asList(
+//        		"go", "eat", "sleep", "use", "buy","refuel" //go vs go to?
+//        );
 		
 		/*element generation*/
         Label label1 = new Label(" ");
         label1.setText("\"" + newPhrase.getConstructedScentence() + "\"");
         
-        ComboBox<String> cb1 = new ComboBox<String>(FXCollections.observableArrayList(SUBJECTS));
+        ComboBox<String> cb1 = new ComboBox<String>(FXCollections.observableArrayList(subjects));
         cb1.setPromptText("Set Subject");
         cb1.setOnAction( value -> {
         	newPhrase.addWord(new Word(Part_Of_Speech.Subject, Phrase_Type.Noun, cb1.getValue()));
         	label1.setText("\"" + newPhrase.getConstructedScentence() + "\"");
         });
         
-        ComboBox<String> cb2 = new ComboBox<String>(FXCollections.observableArrayList(VERBS));
+        ComboBox<String> cb2 = new ComboBox<String>(FXCollections.observableArrayList(verbs));
         cb2.setPromptText("Set Subject");
         cb2.setOnAction( value -> {
         	newPhrase.addWord(new Word(Part_Of_Speech.Verb, Phrase_Type.Verb, cb2.getValue()));
         	label1.setText("\"" + newPhrase.getConstructedScentence() + "\"");
         });
         
-        ComboBox<String> cb3 = new ComboBox<String>(FXCollections.observableArrayList(OBJECTS));
+        ComboBox<String> cb3 = new ComboBox<String>(FXCollections.observableArrayList(objects));
         cb3.setPromptText("Set Object");
         cb3.setOnAction(value -> {
         	newPhrase.addWord(new Word(Part_Of_Speech.Object, Phrase_Type.Noun, cb3.getValue()));
@@ -126,50 +123,16 @@ public class Main extends Application implements TalkBoxConfiguration {
         primaryStage.show();
     }//end start
 
-    public static void main(String[] args) {
-    	try {
-			marytts = new LocalMaryInterface();
-		} catch (MaryConfigurationException e) {
-			e.printStackTrace();
-		}
-		newPhrase = new Sentence();
-        Application.launch(args);
-    }
-
-	@Override
-	public int getNumberOfAudioButtons() {
-		return this.numOfAudioButtons;
-	}
-
-	@Override
-	public int getNumberOfAudioSets() {
-		// TODO Auto-generated method stub
-		return this.numOfAudioSets;
-	}
-
-	@Override
-	public int getTotalNumberOfButtons() {
-		// TODO Auto-generated method stub
-		return this.numOfTotalButtons;
-	}
-
-	@Override
-	public Path getRelativePathToAudioFiles() {
-		// TODO Auto-generated method stub
-		return this.audioPath;
-	}
-
-	@Override
-	public String[][] getAudioFileNames() {
-		// TODO Auto-generated method stub
-		return audioFileNames;
+	
+	public void addSubject(String word) {
+		subjects.add(word);
 	}
 	
-	public static long choose(long total, long choose){
-	    if(total < choose)
-	        return 0;
-	    if(choose == 0 || choose == total)
-	        return 1;
-	    return choose(total-1,choose-1)+choose(total-1,choose);
+	public void addObject(String word) {
+		objects.add(word);
+	}
+	
+	public void addVerb(String word) {
+		verbs.add(word);
 	}
 }
