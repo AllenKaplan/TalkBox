@@ -20,17 +20,21 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import marytts.LocalMaryInterface;
 import marytts.MaryInterface;
+import marytts.exceptions.MaryConfigurationException;
 import marytts.exceptions.SynthesisException;
 
 public class Main extends Application implements TalkBoxConfiguration {
 
 	private static final long serialVersionUID = -7803131998105179478L;
 	
+	//talk box interface attributes
 	private int numOfAudioButtons, numOfAudioSets, numOfTotalButtons;
-
 	private String[][] audioFileNames;
-	
 	private Path audioPath;
+	
+	//SimpleNLG interface
+	private static MaryInterface marytts;
+	private static Sentence newPhrase;
 	
 	@Override
     public void start(Stage primaryStage) throws Exception {
@@ -46,9 +50,6 @@ public class Main extends Application implements TalkBoxConfiguration {
     	final String[] VERBS = {
         		"go", "eat", "sleep", "use", "buy" //go vs go to?
         };
-    	
-    	MaryInterface marytts = new LocalMaryInterface();
-		Sentence newPhrase = new Sentence();
 		
 		numOfAudioButtons = 1;
 		numOfAudioSets = (int) (Main.choose(3, 1) * Main.choose(8, 1) * Main.choose(6, 1)); //3c1 * 
@@ -122,11 +123,16 @@ public class Main extends Application implements TalkBoxConfiguration {
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();
         primaryStage.show();
-    }
+    }//end start
 
     public static void main(String[] args) {
+    	try {
+			marytts = new LocalMaryInterface();
+		} catch (MaryConfigurationException e) {
+			e.printStackTrace();
+		}
+		newPhrase = new Sentence();
         Application.launch(args);
-      
     }
 
 	@Override
