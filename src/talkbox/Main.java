@@ -52,7 +52,7 @@ public class Main extends Application implements TalkBoxConfiguration {
         };
 		
 		numOfAudioButtons = 1;
-		numOfAudioSets = (int) (Main.choose(3, 1) * Main.choose(8, 1) * Main.choose(6, 1)); //3c1 * 
+		numOfAudioSets = (int) (Main.choose(3, 1) * Main.choose(8, 1) * Main.choose(6, 1)); 
 		numOfTotalButtons = 6;
 		audioPath = null;
 		audioFileNames = null;
