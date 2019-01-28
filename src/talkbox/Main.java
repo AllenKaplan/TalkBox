@@ -37,11 +37,11 @@ public class Main extends Application implements TalkBoxConfiguration {
     	};
     	
     	final String[] OBJECTS = {
-        		"me", "you", "they", "the washroom", "home", "the food", "a present"//the vs. for?
+        		"me", "you", "they", "the washroom", "home", "the food", "a present","car"//the vs. for?
         };
     	
     	final String[] VERBS = {
-        		"go", "eat", "sleep", "use", "buy" //go vs go to?
+        		"go", "eat", "sleep", "use", "buy","refuel" //go vs go to?
         };
     	
     	MaryInterface marytts = new LocalMaryInterface();
