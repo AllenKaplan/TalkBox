@@ -2,6 +2,7 @@ package talkbox;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -48,13 +49,13 @@ public class Main extends Application implements TalkBoxConfiguration {
         };
     	
     	final String[] VERBS = {
-        		"go", "eat", "sleep", "use", "buy" //go vs go to?
+        		"go", "eat", "sleep", "use", "buy","refuel" //go vs go to?
         };
 		
 		numOfAudioButtons = 1;
-		numOfAudioSets = (int) (Main.choose(3, 1) * Main.choose(8, 1) * Main.choose(6, 1)); 
+		numOfAudioSets = (int) (Main.choose(SUBJECTS.length, 1) * Main.choose(OBJECTS.length, 1) * Main.choose(VERBS.length, 1)); //3c1 * 
 		numOfTotalButtons = 6;
-		audioPath = null;
+		audioPath = Paths.get("/audiofiles");
 		audioFileNames = null;
 		
 		/*element generation*/
