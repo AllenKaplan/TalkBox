@@ -25,7 +25,13 @@ import marytts.exceptions.SynthesisException;
 public class Main extends Application implements TalkBoxConfiguration {
 
 	private static final long serialVersionUID = -7803131998105179478L;
+	
+	private int numOfAudioButtons, numOfAudioSets, numOfTotalButtons;
 
+	private String[][] audioFileNames;
+	
+	private Path audioPath;
+	
 	@Override
     public void start(Stage primaryStage) throws Exception {
     	
@@ -34,15 +40,21 @@ public class Main extends Application implements TalkBoxConfiguration {
     	};
     	
     	final String[] OBJECTS = {
-        		"me", "you", "they", "the washroom", "home", "the food", "a present", "dank kush"//the vs. for?
+        		"me", "you", "they", "the washroom", "home", "the food", "a present" //the vs. for?
         };
     	
     	final String[] VERBS = {
-        		"go", "eat", "sleep", "use", "buy", "smoke"  //go vs go to?
+        		"go", "eat", "sleep", "use", "buy" //go vs go to?
         };
     	
     	MaryInterface marytts = new LocalMaryInterface();
 		Sentence newPhrase = new Sentence();
+		
+		numOfAudioButtons = 1;
+		numOfAudioSets = (int) (Main.choose(3, 1) * Main.choose(8, 1) * Main.choose(6, 1)); //3c1 * 
+		numOfTotalButtons = 6;
+		audioPath = null;
+		audioFileNames = null;
 		
 		/*element generation*/
         Label label1 = new Label(" ");
@@ -114,34 +126,43 @@ public class Main extends Application implements TalkBoxConfiguration {
 
     public static void main(String[] args) {
         Application.launch(args);
+      
     }
 
 	@Override
 	public int getNumberOfAudioButtons() {
-		return 0;
+		return this.numOfAudioButtons;
 	}
 
 	@Override
 	public int getNumberOfAudioSets() {
 		// TODO Auto-generated method stub
-		return 0;
+		return this.numOfAudioSets;
 	}
 
 	@Override
 	public int getTotalNumberOfButtons() {
 		// TODO Auto-generated method stub
-		return 0;
+		return this.numOfTotalButtons;
 	}
 
 	@Override
 	public Path getRelativePathToAudioFiles() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.audioPath;
 	}
 
 	@Override
 	public String[][] getAudioFileNames() {
 		// TODO Auto-generated method stub
-		return null;
+		return audioFileNames;
+	}
+	
+	public static long choose(long total, long choose){
+	    if(total < choose)
+	        return 0;
+	    if(choose == 0 || choose == total)
+	        return 1;
+	    return choose(total-1,choose-1)+choose(total-1,choose);
 	}
 }
