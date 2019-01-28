@@ -2,6 +2,7 @@ package talkbox;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -20,15 +21,22 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import marytts.LocalMaryInterface;
 import marytts.MaryInterface;
+import marytts.exceptions.MaryConfigurationException;
 import marytts.exceptions.SynthesisException;
 
 public class Main extends Application implements TalkBoxConfiguration {
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = -7803131998105179478L;
-
+	
+	//talk box interface attributes
+	private int numOfAudioButtons, numOfAudioSets, numOfTotalButtons;
+	private String[][] audioFileNames;
+	private Path audioPath;
+	
+	//SimpleNLG interface
+	private static MaryInterface marytts;
+	private static Sentence newPhrase;
+	
 	@Override
     public void start(Stage primaryStage) throws Exception {
     	
@@ -37,16 +45,18 @@ public class Main extends Application implements TalkBoxConfiguration {
     	};
     	
     	final String[] OBJECTS = {
-        		"me", "you", "they", "the washroom", "home", "the food", "a present","car"//the vs. for?
+        		"me", "you", "they", "the washroom", "home", "the food", "a present" //the vs. for?
         };
     	
     	final String[] VERBS = {
         		"go", "eat", "sleep", "use", "buy","refuel" //go vs go to?
         };
-    	
-    	MaryInterface marytts = new LocalMaryInterface();
-		Sentence newPhrase = new Sentence();
 		
+		numOfAudioButtons = 1;
+		numOfAudioSets = (int) (Main.choose(SUBJECTS.length, 1) * Main.choose(OBJECTS.length, 1) * Main.choose(VERBS.length, 1)); //3c1 * 
+		numOfTotalButtons = 6;
+		audioPath = Paths.get("/audiofiles");
+		audioFileNames = null;
 		
 		/*element generation*/
         Label label1 = new Label(" ");
@@ -114,38 +124,52 @@ public class Main extends Application implements TalkBoxConfiguration {
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();
         primaryStage.show();
-    }
+    }//end start
 
     public static void main(String[] args) {
+    	try {
+			marytts = new LocalMaryInterface();
+		} catch (MaryConfigurationException e) {
+			e.printStackTrace();
+		}
+		newPhrase = new Sentence();
         Application.launch(args);
     }
 
 	@Override
 	public int getNumberOfAudioButtons() {
-		return 0;
+		return this.numOfAudioButtons;
 	}
 
 	@Override
 	public int getNumberOfAudioSets() {
 		// TODO Auto-generated method stub
-		return 0;
+		return this.numOfAudioSets;
 	}
 
 	@Override
 	public int getTotalNumberOfButtons() {
 		// TODO Auto-generated method stub
-		return 0;
+		return this.numOfTotalButtons;
 	}
 
 	@Override
 	public Path getRelativePathToAudioFiles() {
 		// TODO Auto-generated method stub
-		return null;
+		return this.audioPath;
 	}
 
 	@Override
 	public String[][] getAudioFileNames() {
 		// TODO Auto-generated method stub
-		return null;
+		return audioFileNames;
+	}
+	
+	public static long choose(long total, long choose){
+	    if(total < choose)
+	        return 0;
+	    if(choose == 0 || choose == total)
+	        return 1;
+	    return choose(total-1,choose-1)+choose(total-1,choose);
 	}
 }
