@@ -43,20 +43,8 @@ public class Simulator extends Application{
 		newPhrase = new Sentence();
 		marytts = new LocalMaryInterface();
 		
-//    	subjects = Arrays.asList(
-//    			"me", "you", "they"
-//    	);
-//    	
-//    	objects = Arrays.asList(
-//        		"me", "you", "they", "the washroom", "home", "the food", "a present" //the vs. for?
-//        );
-//    	
-//    	verbs = Arrays.asList(
-//        		"go", "eat", "sleep", "use", "buy","refuel" //go vs go to?
-//        );
-		
 		/*element generation*/
-        Label label1 = new Label(" ");
+        Label label1 = new Label();
         label1.setText("\"" + newPhrase.getConstructedScentence() + "\"");
         
         ComboBox<String> cb1 = new ComboBox<String>(FXCollections.observableArrayList(subjects));
@@ -67,7 +55,7 @@ public class Simulator extends Application{
         });
         
         ComboBox<String> cb2 = new ComboBox<String>(FXCollections.observableArrayList(verbs));
-        cb2.setPromptText("Set Subject");
+        cb2.setPromptText("Set Verb");
         cb2.setOnAction( value -> {
         	newPhrase.addWord(new Word(Part_Of_Speech.Verb, Phrase_Type.Verb, cb2.getValue()));
         	label1.setText("\"" + newPhrase.getConstructedScentence() + "\"");
