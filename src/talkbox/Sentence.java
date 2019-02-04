@@ -10,6 +10,8 @@ import simplenlg.phrasespec.*;
 
 import java.util.ArrayList;
 
+import javafx.util.Callback;
+
 public class Sentence {
 	
 	//SimpleNLG attributes
@@ -95,4 +97,15 @@ public class Sentence {
 		
 		return realiser.realiseSentence(p);
 	}
+
+	public ArrayList<String> getTenses() {
+		ArrayList<String> tenses = new ArrayList<String>();
+		tenses.add("Past");
+		tenses.add("Present");
+		tenses.add("Future");
+		return tenses;
+	}
+	
+	
+
 }

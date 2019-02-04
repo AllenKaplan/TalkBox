@@ -14,10 +14,12 @@ import javax.sound.sampled.LineUnavailableException;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -26,78 +28,66 @@ import marytts.LocalMaryInterface;
 import marytts.MaryInterface;
 import marytts.exceptions.MaryConfigurationException;
 import marytts.exceptions.SynthesisException;
+import simplenlg.features.Tense;
 
-public class Simulator extends Application{
-	
-	//talk box interface attributes
+public class Simulator extends Application {
+
+	// talk box interface attributes
 	List<String> subjects = new ArrayList<String>();
 	List<String> objects = new ArrayList<String>();
 	List<String> verbs = new ArrayList<String>();
-	
-	//SimpleNLG interface
+
+	// SimpleNLG interface
 	private static MaryInterface marytts;
 	private static Sentence newPhrase;
 	
+	//Label
+	Label currentSentance;
+	List<ComboBox> verbiage = new ArrayList<ComboBox>();;
+
 	@Override
     public void start(Stage primaryStage) throws Exception {
 		newPhrase = new Sentence();
 		marytts = new LocalMaryInterface();
 		
-//    	subjects = Arrays.asList(
-//    			"me", "you", "they"
-//    	);
-//    	
-//    	objects = Arrays.asList(
-//        		"me", "you", "they", "the washroom", "home", "the food", "a present" //the vs. for?
-//        );
-//    	
-//    	verbs = Arrays.asList(
-//        		"go", "eat", "sleep", "use", "buy","refuel" //go vs go to?
-//        );
-		
+    	subjects.addAll(Arrays.asList("me", "you", "they"));
+    	objects.addAll(Arrays.asList("the washroom", "home", "the food", "a present"));
+    	verbs.addAll(Arrays.asList("go", "eat", "sleep", "use", "buy","refuel"));
+    	
 		/*element generation*/
-        Label label1 = new Label(" ");
-        label1.setText("\"" + newPhrase.getConstructedScentence() + "\"");
+        currentSentance = new Label(" ");
+        currentSentance.setText("\"" + newPhrase.getConstructedScentence() + "\"");
         
-        ComboBox<String> cb1 = new ComboBox<String>(FXCollections.observableArrayList(subjects));
-        cb1.setPromptText("Set Subject");
-        cb1.setOnAction( value -> {
-        	newPhrase.addWord(new Word(Part_Of_Speech.Subject, Phrase_Type.Noun, cb1.getValue()));
-        	label1.setText("\"" + newPhrase.getConstructedScentence() + "\"");
+        addVerbiage("Subject", subjects, Part_Of_Speech.Subject, Phrase_Type.Noun);
+        addVerbiage("Verb", verbs, Part_Of_Speech.Verb, Phrase_Type.Verb);
+        addVerbiage("Object", objects, Part_Of_Speech.Object, Phrase_Type.Noun);
+        
+        ToggleButton questionToggleButton = new ToggleButton("Question?");
+        questionToggleButton.setOnAction(value -> {
+        	newPhrase.setQuestion(questionToggleButton.isSelected());
+        	currentSentance.setText("\"" + newPhrase.getConstructedScentence() + "\"");
         });
         
-        ComboBox<String> cb2 = new ComboBox<String>(FXCollections.observableArrayList(verbs));
-        cb2.setPromptText("Set Subject");
-        cb2.setOnAction( value -> {
-        	newPhrase.addWord(new Word(Part_Of_Speech.Verb, Phrase_Type.Verb, cb2.getValue()));
-        	label1.setText("\"" + newPhrase.getConstructedScentence() + "\"");
+        ComboBox<String> tenseBox = new ComboBox<String>(FXCollections.observableArrayList(newPhrase.getTenses()));
+        tenseBox.setPromptText("Select Tense");
+        tenseBox.setOnAction(value -> {
+        	switch (tenseBox.getValue()){
+        		case "Past": newPhrase.setTense(Tense.PAST);
+        		break;
+        		case "Present": newPhrase.setTense(Tense.PRESENT);
+        		break;
+        		case "Future": newPhrase.setTense(Tense.FUTURE);
+        		break;
+        	}
+        	currentSentance.setText("\"" + newPhrase.getConstructedScentence() + "\"");
         });
         
-        ComboBox<String> cb3 = new ComboBox<String>(FXCollections.observableArrayList(objects));
-        cb3.setPromptText("Set Object");
-        cb3.setOnAction(value -> {
-        	newPhrase.addWord(new Word(Part_Of_Speech.Object, Phrase_Type.Noun, cb3.getValue()));
-        	label1.setText("\"" + newPhrase.getConstructedScentence() + "\"");
-        });
-        
-        ToggleButton button6 = new ToggleButton("Question?");
-        button6.setOnAction(value -> {
-        	newPhrase.setQuestion(button6.isSelected());
-        	label1.setText("\"" + newPhrase.getConstructedScentence() + "\"");
-        });
-        
-        Button button7 = new Button("Change Tense");
-        button7.setOnAction( value -> {
-        	newPhrase.rotateTense();
-        	label1.setText("\"" + newPhrase.getConstructedScentence() + "\"");
-        });
-        
-        Button button8 = new Button("PLAY");
-        button8.setOnAction( value -> {
+        Button playButton = new Button("PLAY");
+        playButton.setOnAction( value -> {
     		AudioInputStream audio;
 			try {
 				Clip clip = AudioSystem.getClip();
-				audio = marytts.generateAudio(label1.getText());
+				audio = marytts.generateAudio(currentSentance.getText());
 	    		clip.open(audio);
 	    		clip.start();
 			} catch (SynthesisException e) {
@@ -113,26 +103,40 @@ public class Simulator extends Application{
         });
         
         /*construct scene from elements*/
-        HBox hbox = new HBox(cb1, cb2, cb3, button6, button7, button8);
-        VBox vbox = new VBox(label1, hbox);
+        HBox verbiageBox = new HBox();
+        verbiageBox.getChildren().addAll(verbiage);
+        HBox selectionsBox = new HBox();
+        selectionsBox.getChildren().add(questionToggleButton);
+        selectionsBox.getChildren().add(tenseBox);
+        selectionsBox.getChildren().add(playButton);
+        VBox vbox = new VBox(currentSentance, verbiageBox, selectionsBox);
         Scene scene = new Scene(vbox);
         
         primaryStage.setTitle("TalkBox TTS Prototype");
         primaryStage.setScene(scene);
         primaryStage.sizeToScene();
         primaryStage.show();
-    }//end start
+    }// end start
 
-	
 	public void addSubject(String word) {
 		subjects.add(word);
 	}
-	
+
 	public void addObject(String word) {
 		objects.add(word);
 	}
-	
+
 	public void addVerb(String word) {
 		verbs.add(word);
+	}
+	
+	void addVerbiage(String verbiageType, List<String> words, Part_Of_Speech partOfSpeech, Phrase_Type phraseType) {
+		ComboBox<String> cb = new ComboBox<String>(FXCollections.observableArrayList(words));
+        cb.setPromptText("Set " + verbiageType);
+        cb.setOnAction( value -> {
+        	newPhrase.addWord(new Word(partOfSpeech, phraseType, cb.getValue()));
+        	currentSentance.setText("\"" + newPhrase.getConstructedScentence() + "\"");
+        });
+        verbiage.add(cb);
 	}
 }
