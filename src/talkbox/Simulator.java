@@ -47,30 +47,30 @@ public class Simulator extends Application{
         Label label1 = new Label();
         label1.setText("\"" + newPhrase.getConstructedScentence() + "\"");
         
-        ComboBox<String> cb1 = new ComboBox<String>(FXCollections.observableArrayList(subjects));
-        cb1.setPromptText("Set Subject");
-        cb1.setOnAction( value -> {
-        	newPhrase.addWord(new Word(Part_Of_Speech.Subject, Phrase_Type.Noun, cb1.getValue()));
+        ComboBox<String> subjectBox = new ComboBox<String>(FXCollections.observableArrayList(subjects));
+        subjectBox.setPromptText("Set Subject");
+        subjectBox.setOnAction( value -> {
+        	newPhrase.addWord(new Word(Part_Of_Speech.Subject, Phrase_Type.Noun, subjectBox.getValue()));
         	label1.setText("\"" + newPhrase.getConstructedScentence() + "\"");
         });
         
-        ComboBox<String> cb2 = new ComboBox<String>(FXCollections.observableArrayList(verbs));
-        cb2.setPromptText("Set Verb");
-        cb2.setOnAction( value -> {
-        	newPhrase.addWord(new Word(Part_Of_Speech.Verb, Phrase_Type.Verb, cb2.getValue()));
+        ComboBox<String> verbBox = new ComboBox<String>(FXCollections.observableArrayList(verbs));
+        verbBox.setPromptText("Set Verb");
+        verbBox.setOnAction( value -> {
+        	newPhrase.addWord(new Word(Part_Of_Speech.Verb, Phrase_Type.Verb, verbBox.getValue()));
         	label1.setText("\"" + newPhrase.getConstructedScentence() + "\"");
         });
         
-        ComboBox<String> cb3 = new ComboBox<String>(FXCollections.observableArrayList(objects));
-        cb3.setPromptText("Set Object");
-        cb3.setOnAction(value -> {
-        	newPhrase.addWord(new Word(Part_Of_Speech.Object, Phrase_Type.Noun, cb3.getValue()));
+        ComboBox<String> objectBox = new ComboBox<String>(FXCollections.observableArrayList(objects));
+        objectBox.setPromptText("Set Object");
+        objectBox.setOnAction(value -> {
+        	newPhrase.addWord(new Word(Part_Of_Speech.Object, Phrase_Type.Noun, objectBox.getValue()));
         	label1.setText("\"" + newPhrase.getConstructedScentence() + "\"");
         });
         
-        ToggleButton button6 = new ToggleButton("Question?");
-        button6.setOnAction(value -> {
-        	newPhrase.setQuestion(button6.isSelected());
+        ToggleButton questionToggle = new ToggleButton("Question?");
+        questionToggle.setOnAction(value -> {
+        	newPhrase.setQuestion(questionToggle.isSelected());
         	label1.setText("\"" + newPhrase.getConstructedScentence() + "\"");
         });
         
@@ -101,7 +101,7 @@ public class Simulator extends Application{
         });
         
         /*construct scene from elements*/
-        HBox hbox = new HBox(cb1, cb2, cb3, button6, button7, button8);
+        HBox hbox = new HBox(subjectBox, verbBox, objectBox, questionToggle, button7, button8);
         VBox vbox = new VBox(label1, hbox);
         Scene scene = new Scene(vbox);
         
