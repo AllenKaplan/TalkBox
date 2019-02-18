@@ -17,6 +17,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 public class Configuration extends Application implements TalkBoxConfiguration {
@@ -31,7 +33,7 @@ public class Configuration extends Application implements TalkBoxConfiguration {
 
 	public static void main(String[] args) {
 		// load simulator to configure
-		sim = new Simulator();
+		//sim = new Simulator();
 		
 		Application.launch(args);
 	}
@@ -74,54 +76,40 @@ public class Configuration extends Application implements TalkBoxConfiguration {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-
-		Label label1 = new Label("Word:");
-		Label label2 = new Label("");
-		TextField textField = new TextField();
-		HBox hb = new HBox(label1, textField, label2);
-		hb.setSpacing(20);
-
-		Button addSubject = new Button("Add Subject");
-		addSubject.setOnAction(value -> {
-			if (!textField.getText().trim().isEmpty())
-				sim.addWord(new Word(textField.getText(), Part_Of_Speech.Subject, Phrase_Type.Noun));
-		});
-
-		Button addObject = new Button("Add Object");
-		addObject.setOnAction(value -> {
-			if (!textField.getText().trim().isEmpty())
-				sim.addWord(new Word(textField.getText(), Part_Of_Speech.Object, Phrase_Type.Noun));
-		});
-
-		Button addVerb = new Button("Add Verb");
-		addVerb.setOnAction(value -> {
-			if (!textField.getText().trim().isEmpty())
-				sim.addWord(new Word(textField.getText(), Part_Of_Speech.Verb, Phrase_Type.Verb));
-		});
 		
-		Button loadDictionary = new Button("Load Dictionary");
+		Label label1 = new Label("Word:");
+		TextField textField = new TextField();
+		HBox hb = new HBox(label1, textField);
+		hb.setSpacing(20);
+		
+		Label pathtxt = new Label("");
+		Button loadDictionary = new Button("Load Custom Dictionary");
 		loadDictionary.setTooltip(new Tooltip("Enter the path to a dictionary\nor leave blank for default"));
 		loadDictionary.setOnAction(value -> {
-			if (textField.getText().trim().isEmpty())
-				try {
-					this.loadDictionary(dictionaryPath, sim);
-					label2.setText("DICTIONARY LOADED");
-				} catch (IOException e) {
-					label2.setText("DICTIONARY NOT FOUND");
-				}
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setTitle("Select Dictionary");
+			fileChooser.setInitialDirectory(Paths.get("resources/dictionaries").toFile());
+			fileChooser.setSelectedExtensionFilter(new ExtensionFilter("Text Files", "*.txt"));
+			File selectedFile = fileChooser.showOpenDialog(primaryStage);
+			if (selectedFile != null) 
+				pathtxt.setText(selectedFile.getPath());
 		});
 
 		Button launcher = new Button("Launch Sim");
 		launcher.setOnAction(value -> {
 			try {
-				sim.start(primaryStage);
+				sim = new Simulator();
+				if (!pathtxt.getText().isEmpty())
+					this.loadDictionary(Paths.get(pathtxt.getText()), sim);
+				sim.start(new Stage());
 			} catch (Exception e) {
 				System.err.println("Error Launching Simulator");
 			}
 		});
 
-		HBox hbox = new HBox(launcher, addSubject, addObject, addVerb, loadDictionary);
-		VBox vbox = new VBox(hbox, hb);
+		HBox hbox = new HBox(launcher);
+		HBox dictionary = new HBox(loadDictionary, pathtxt);
+		VBox vbox = new VBox(hbox, dictionary, hb);
 		Scene scene = new Scene(vbox);
 
 		primaryStage.setTitle("TalkBox TTS Configuration");
@@ -134,7 +122,7 @@ public class Configuration extends Application implements TalkBoxConfiguration {
 		BufferedReader br = new BufferedReader(new FileReader(dictionaryPath.toFile()));
 		Part_Of_Speech p = null;
 		while (br.ready()) {
-			String next = br.readLine();
+			String next = br.readLine().trim();
 			switch (next) {
 			case "SUBJECTS":
 				p = Part_Of_Speech.Subject;

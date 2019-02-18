@@ -121,13 +121,16 @@ public class Simulator extends Application {
 	public void addWord(Word word) {
 		switch (word.getPartOfSpeech()) {
 		case Subject:
-			subjects.add(word);
+			if (!subjects.contains(word)) 
+				subjects.add(word);
 			break;
 		case Object:
-			objects.add(word);
+			if (!objects.contains(word))
+				objects.add(word);
 			break;
 		case Verb:
-			verbs.add(word);
+			if (!verbs.contains(word))
+				verbs.add(word);
 			break;
 		default:
 		}
