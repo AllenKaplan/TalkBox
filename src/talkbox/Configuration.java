@@ -1,144 +1,114 @@
 package talkbox;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class Configuration extends Application implements TalkBoxConfiguration {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 5254129808184630659L;
-
-	private int numOfAudioButtons, numOfAudioSets, numOfTotalButtons;
-	private String[][] audioFileNames;
-	private Path audioPath;
+	
+	private static final Path audioPath = Paths.get("resources/AudioFiles");
+	private static final Path dictionaryPath = Paths.get("resources/dictionaries/StandardDictionary");
+	private static final int MAX_CUSTOM_AUDIO_BUTTONS = 5, NUM_OF_TOTAL_BUTTONS = 11;
+	
 	static Simulator sim;
 
 	public static void main(String[] args) {
 		// load simulator to configure
 		sim = new Simulator();
-
-		// load default library
-		FileReader in;
-		try {
-			in = new FileReader("resources/dictionaries/StandardDictionary"); // TODO: replace this with audioPath Path
-																				// Object
-			BufferedReader br = new BufferedReader(in);
-			String line;
-			String category = null;
-			while (br.ready()) {
-				line = br.readLine();
-
-				if (line.equals("SUBJECTS")) {
-					category = "SUBJECT";
-				} else if (line.equals("OBJECTS")) {
-					category = "OBJECT";
-				} else if (line.equals("VERBS")) {
-					category = "VERB";
-				} else if (line.length() == 0) {
-					// do nothing?
-				} else {
-					switch (category) {
-					case "SUBJECT":
-						sim.addSubject(line);
-						break;
-					case "OBJECT":
-						sim.addObject(line);
-						break;
-					case "VERB":
-						sim.addVerb(line);
-						break;
-					}
-				}
-			}
-			br.close();
-		} catch (IOException e) {
-			// e.printStackTrace();
-		}
-
-		// launch configurator
+		
 		Application.launch(args);
 	}
 
 	@Override
 	public int getNumberOfAudioButtons() {
-		return this.numOfAudioButtons;
+		return Configuration.MAX_CUSTOM_AUDIO_BUTTONS;
 	}
 
 	@Override
 	public int getNumberOfAudioSets() {
-		// TODO Auto-generated method stub
-		return this.numOfAudioSets;
+		return this.getRelativePathToAudioFiles().toFile().listFiles().length;
 	}
 
 	@Override
 	public int getTotalNumberOfButtons() {
-		// TODO Auto-generated method stub
-		return this.numOfTotalButtons;
+		return Configuration.NUM_OF_TOTAL_BUTTONS;
 	}
 
 	@Override
 	public Path getRelativePathToAudioFiles() {
-		// TODO Auto-generated method stub
-		return this.audioPath;
+		return Configuration.audioPath;
 	}
 
 	@Override
 	public String[][] getAudioFileNames() {
-		// TODO Auto-generated method stub
-		return audioFileNames;
-	}
-
-	public static long choose(long total, long choose) {
-		if (total < choose)
-			return 0;
-		if (choose == 0 || choose == total)
-			return 1;
-		return choose(total - 1, choose - 1) + choose(total - 1, choose);
+		File[] files =  this.getRelativePathToAudioFiles().toFile().listFiles();
+		String[][] names = new String[this.getNumberOfAudioSets()][this.getNumberOfAudioButtons()];
+		int i = 0, j = 0;
+		for (File d : files) {
+			if (d.isDirectory()) 
+				for (File f : d.listFiles()) 
+					if (f.isFile())
+						names[i][j++] = f.getName();
+			i++;
+			j = 0;
+		}
+		return names;
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		numOfAudioButtons = 1;
-		// numOfAudioSets= (int)
-		// (this.choose(subjects.size(),1)*this.choose(objects.size(),1)*this.choose(verbs.size(),1));
-		numOfTotalButtons = 6;
-		audioPath = Paths.get("/audiofiles");
-		audioFileNames = null;
 
 		Label label1 = new Label("Word:");
+		Label label2 = new Label("");
 		TextField textField = new TextField();
-		HBox hb = new HBox(label1, textField);
+		HBox hb = new HBox(label1, textField, label2);
 		hb.setSpacing(20);
 
 		Button addSubject = new Button("Add Subject");
 		addSubject.setOnAction(value -> {
 			if (!textField.getText().trim().isEmpty())
-				sim.addSubject(textField.getText());
+				sim.addWord(new Word(textField.getText(), Part_Of_Speech.Subject, Phrase_Type.Noun));
 		});
 
 		Button addObject = new Button("Add Object");
 		addObject.setOnAction(value -> {
 			if (!textField.getText().trim().isEmpty())
-				sim.addObject(textField.getText());
+				sim.addWord(new Word(textField.getText(), Part_Of_Speech.Object, Phrase_Type.Noun));
 		});
 
 		Button addVerb = new Button("Add Verb");
 		addVerb.setOnAction(value -> {
 			if (!textField.getText().trim().isEmpty())
-				sim.addVerb(textField.getText());
+				sim.addWord(new Word(textField.getText(), Part_Of_Speech.Verb, Phrase_Type.Verb));
+		});
+		
+		Button loadDictionary = new Button("Load Dictionary");
+		loadDictionary.setTooltip(new Tooltip("Enter the path to a dictionary\nor leave blank for default"));
+		loadDictionary.setOnAction(value -> {
+			if (textField.getText().trim().isEmpty())
+				try {
+					this.loadDictionary(dictionaryPath, sim);
+					label2.setText("DICTIONARY LOADED");
+				} catch (IOException e) {
+					label2.setText("DICTIONARY NOT FOUND");
+				}
 		});
 
 		Button launcher = new Button("Launch Sim");
@@ -146,12 +116,11 @@ public class Configuration extends Application implements TalkBoxConfiguration {
 			try {
 				sim.start(primaryStage);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.err.println("Error Launching Simulator");
 			}
 		});
 
-		HBox hbox = new HBox(launcher, addSubject, addObject, addVerb);
+		HBox hbox = new HBox(launcher, addSubject, addObject, addVerb, loadDictionary);
 		VBox vbox = new VBox(hbox, hb);
 		Scene scene = new Scene(vbox);
 
@@ -159,7 +128,29 @@ public class Configuration extends Application implements TalkBoxConfiguration {
 		primaryStage.setScene(scene);
 		primaryStage.sizeToScene();
 		primaryStage.show();
-
+	}
+	
+	private void loadDictionary(Path dictionaryPath, Simulator sim) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader(dictionaryPath.toFile()));
+		Part_Of_Speech p = null;
+		while (br.ready()) {
+			String next = br.readLine();
+			switch (next) {
+			case "SUBJECTS":
+				p = Part_Of_Speech.Subject;
+				break;
+			case "OBJECTS":
+				p = Part_Of_Speech.Object;
+				break;
+			case "VERBS":
+				p = Part_Of_Speech.Verb;
+				break;
+			default:
+				if (!next.isEmpty())
+					sim.addWord(new Word(next, p, Phrase_Type.Noun));
+			}
+		}
+		br.close();
 	}
 
 }

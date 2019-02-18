@@ -6,7 +6,7 @@ public class Word {
 	private Phrase_Type phraseType;
 	private String content;
 	
-	Word(Part_Of_Speech partOfSpeech, Phrase_Type phraseType, String content) {
+	Word(String content, Part_Of_Speech partOfSpeech, Phrase_Type phraseType) {
 		this.partOfSpeech = partOfSpeech;
 		this.phraseType = phraseType;
 		this.content = content;
@@ -20,7 +20,7 @@ public class Word {
 		return this.phraseType;
 	}
 	
-	public String getContent() {
+	public String toString() {
 		return this.content;
 	}
 	

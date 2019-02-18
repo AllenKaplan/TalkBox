@@ -48,42 +48,29 @@ public class Sentence {
 		this.tense = tense;
 	}
 	
-	public void rotateTense() {
-		switch (this.tense) {
-		case FUTURE:
-			this.tense = Tense.PAST;
-			break;
-		case PAST:
-			this.tense = Tense.PRESENT;
-			break;
-		case PRESENT:
-			this.tense = Tense.FUTURE;
-			break;
-		}
-	}
-	
 	public void setQuestion(boolean tf) {
 		this.question = tf;
 	}
 	
 	public String getConstructedScentence() {
 		SPhraseSpec p = nlgFactory.createClause();
+		
 		for (Word w: words) {
 			switch (w.getPartOfSpeech()) {
 				case Subject:
-					p.setSubject(w.getContent());
+					p.setSubject(w.toString());
 					break;
 				case Verb:
-					p.setVerb(w.getContent());
+					p.setVerb(w.toString());
 					break;
 				case Object:
-					p.setObject(w.getContent());
+					p.setObject(w.toString());
 					break;
 				case Compliment:
-					p.setComplement(w.getContent());
+					p.setComplement(w.toString());
 					break;
 				case Indirect_Object:
-					p.setIndirectObject(w.getContent());
+					p.setIndirectObject(w.toString());
 					break;
 				default:
 					break;
