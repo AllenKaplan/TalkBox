@@ -10,8 +10,6 @@ import simplenlg.phrasespec.*;
 
 import java.util.ArrayList;
 
-import javafx.util.Callback;
-
 public class Sentence {
 	
 	//SimpleNLG attributes

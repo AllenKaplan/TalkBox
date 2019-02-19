@@ -1,14 +1,14 @@
 package talkbox;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
-import javax.swing.text.html.ListView;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -16,12 +16,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import marytts.LocalMaryInterface;
 import marytts.MaryInterface;
 import marytts.exceptions.MaryConfigurationException;
@@ -34,6 +32,10 @@ public class Simulator extends Application {
 	private List<Word> subjects = new ArrayList<Word>();
 	private List<Word> objects = new ArrayList<Word>();
 	private List<Word> verbs = new ArrayList<Word>();
+	
+	//custom audio sets
+	public File[] audioSet;
+	private List<Button> custom;
 
 	// SimpleNLG interface
 	private MaryInterface marytts;
@@ -48,12 +50,17 @@ public class Simulator extends Application {
 	//buttons
 	ToggleButton questionToggleButton;
 	
+	//current clip playing
+	Clip currentClip;
+	
 	@Override
-	public void start(Stage primaryStage) throws MaryConfigurationException {
+	public void start(Stage primaryStage) throws MaryConfigurationException, LineUnavailableException {
 		currentSentence = new Sentence();
 		marytts = new LocalMaryInterface();
 		verbiage = new ArrayList<ComboBox<Word>>();
+		custom = new ArrayList<Button>();
 		sentenceLabel = new Label();
+		currentClip = AudioSystem.getClip();
 		
 		/* element generation */
 		sentenceLabel.setText("\"" + currentSentence.getConstructedScentence() + "\"");
@@ -61,6 +68,10 @@ public class Simulator extends Application {
 		addVerbiage("Subject", subjects);
 		addVerbiage("Verb", verbs);
 		addVerbiage("Object", objects);
+		
+		for (File f : audioSet) {
+			addAudioButton(f);
+		}
 
 		ToggleButton questionToggleButton = new ToggleButton("Question?");
 		questionToggleButton.setOnAction(value -> {
@@ -87,12 +98,11 @@ public class Simulator extends Application {
 
 		Button playButton = new Button("PLAY");
 		playButton.setOnAction(value -> {
-			AudioInputStream audio;
 			try {
-				Clip clip = AudioSystem.getClip();
-				audio = marytts.generateAudio(sentenceLabel.getText());
-				clip.open(audio);
-				clip.start();
+				if (currentClip.isOpen())
+					currentClip.close();
+				currentClip.open(marytts.generateAudio(sentenceLabel.getText()));
+				currentClip.start();
 			} catch (SynthesisException | LineUnavailableException | IOException e) {
 				System.err.println("ERROR GENERATING SPEECH");
 			} 
@@ -101,15 +111,15 @@ public class Simulator extends Application {
 		/* construct scene from elements */
 		HBox verbiageBox = new HBox();
 		verbiageBox.getChildren().addAll(verbiage);
+		HBox customAudioBox = new HBox();
+		customAudioBox.getChildren().addAll(custom);
 		HBox selectionsBox = new HBox();
 		selectionsBox.getChildren().add(questionToggleButton);
 		selectionsBox.getChildren().add(tenseBox);
 		selectionsBox.getChildren().add(playButton);
-		//TODO: add 5 custom audio buttons
-		HBox customAudioBox = new HBox();
 		
 		
-		VBox vbox = new VBox(sentenceLabel, verbiageBox, selectionsBox);
+		VBox vbox = new VBox(sentenceLabel, verbiageBox, selectionsBox, customAudioBox);
 		Scene scene = new Scene(vbox);
 
 		primaryStage.setTitle("TalkBox TTS Prototype");
@@ -134,6 +144,21 @@ public class Simulator extends Application {
 			break;
 		default:
 		}
+	}
+	
+	public void addAudioButton(File audio) {
+		Button customAudio = new Button(audio.getName().substring(0, audio.getName().indexOf('.')));
+		customAudio.setOnAction(value -> {
+			try {
+				if (currentClip.isOpen())
+					currentClip.close();
+				currentClip.open(AudioSystem.getAudioInputStream(audio));
+				currentClip.start();
+			} catch (LineUnavailableException | IOException | UnsupportedAudioFileException e) {
+				System.err.println("PLAYBACK ERROR");
+			} 
+		});
+		custom.add(customAudio);
 	}
 	
 	private void addVerbiage(String verbiageType, List<Word> words) {
