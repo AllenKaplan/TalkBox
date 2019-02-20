@@ -24,7 +24,7 @@ public class Configuration extends Application implements TalkBoxConfiguration {
 	private static final long serialVersionUID = 5254129808184630659L;
 	
 	private static final Path audioPath = Paths.get("resources/AudioFiles");
-	private static final int MAX_CUSTOM_AUDIO_BUTTONS = 5, NUM_OF_TOTAL_BUTTONS = 11;
+	public static final int MAX_CUSTOM_AUDIO_BUTTONS = 5, NUM_OF_TOTAL_BUTTONS = 11;
 	
 	static Simulator sim;
 
@@ -70,12 +70,6 @@ public class Configuration extends Application implements TalkBoxConfiguration {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		
-//		Label label1 = new Label("Word:");
-//		TextField textField = new TextField();
-//		HBox hb = new HBox(label1, textField);
-//		hb.setSpacing(20);
-		
 		Label dictionaryPathTxt = new Label("");
 		Button loadDictionary = new Button("Load Custom Dictionary");
 		loadDictionary.setTooltip(new Tooltip("Select path to a dictionary\nor leave blank for default"));
@@ -85,8 +79,10 @@ public class Configuration extends Application implements TalkBoxConfiguration {
 			fileChooser.setInitialDirectory(Paths.get("resources/dictionaries").toFile());
 			fileChooser.setSelectedExtensionFilter(new ExtensionFilter("Text Files", "*.txt"));
 			File selectedFile = fileChooser.showOpenDialog(primaryStage);
-			if (selectedFile != null) 
+			if (selectedFile != null) {
 				dictionaryPathTxt.setText(selectedFile.getPath());
+				primaryStage.sizeToScene();
+			}
 		});
 		
 		Label audioPathTxt = new Label("");
@@ -96,15 +92,17 @@ public class Configuration extends Application implements TalkBoxConfiguration {
 			DirectoryChooser  directoryChooser  = new DirectoryChooser();
 			directoryChooser.setTitle("Select Audio Set");
 			directoryChooser.setInitialDirectory(Paths.get("resources/AudioFiles").toFile());
-			//fileChooser.setSelectedExtensionFilter(new ExtensionFilter("Text Files", "*.txt")); should be for .mp3? .wav?
 			File selectedFile = directoryChooser.showDialog(primaryStage);
-			if (selectedFile != null) 
+			if (selectedFile != null) {
 				audioPathTxt.setText(selectedFile.getPath());
+				primaryStage.sizeToScene();
+			}
 		});
 
 		Button launcher = new Button("Launch Sim");
 		launcher.setOnAction(value -> {
 			try {
+				//TODO: REPLACE WITH SERIALIZATION ???
 				sim = new Simulator();
 				if (!dictionaryPathTxt.getText().isEmpty())
 					this.loadDictionary(Paths.get(dictionaryPathTxt.getText()), sim);

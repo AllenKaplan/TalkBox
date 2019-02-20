@@ -25,15 +25,11 @@ public class Word {
 	}
 	
 	/*
-	 * These methods seem to make no difference when using an ArrayList<Word>
+	 * This method seems to make no difference when using an ArrayList<Word>
 	 * The contains method always returns false
 	 * (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
-	@Override
-	public int hashCode(){ 
-		  return 0; //just for overriding purpose
-	}
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Word) {

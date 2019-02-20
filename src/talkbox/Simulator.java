@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -61,6 +62,11 @@ public class Simulator extends Application {
 		custom = new ArrayList<Button>();
 		sentenceLabel = new Label();
 		currentClip = AudioSystem.getClip();
+		currentClip.addLineListener(event -> {
+		    if(LineEvent.Type.STOP.equals(event.getType())) {
+		    	currentClip.close();
+		    }
+		});
 		
 		/* element generation */
 		sentenceLabel.setText("\"" + currentSentence.getConstructedScentence() + "\"");
@@ -70,7 +76,8 @@ public class Simulator extends Application {
 		addVerbiage("Object", objects);
 		
 		for (File f : audioSet) {
-			addAudioButton(f);
+			if (custom.size() < Configuration.MAX_CUSTOM_AUDIO_BUTTONS)
+				addAudioButton(f);
 		}
 
 		ToggleButton questionToggleButton = new ToggleButton("Question?");

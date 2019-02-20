@@ -28,14 +28,13 @@ public class Sentence {
 	 * Defaults: Empty word arraylist, Tense = Present, Question = false;
 	 */
 	Sentence() {
-		this.words = new ArrayList<Word>();
-		
+		words = new ArrayList<Word>();
 		lexicon = Lexicon.getDefaultLexicon();
 		nlgFactory = new NLGFactory(lexicon);
 		realiser = new Realiser(lexicon);
 		
-		this.setTense(Tense.PRESENT);
-		this.setQuestion(false);
+		setTense(Tense.PRESENT);
+		setQuestion(false);
 	}
 	
 	public void addWord(Word w) {
@@ -52,7 +51,6 @@ public class Sentence {
 	
 	public String getConstructedScentence() {
 		SPhraseSpec p = nlgFactory.createClause();
-		
 		for (Word w: words) {
 			switch (w.getPartOfSpeech()) {
 				case Subject:
@@ -64,12 +62,12 @@ public class Sentence {
 				case Object:
 					p.setObject(w.toString());
 					break;
-				case Compliment:
-					p.setComplement(w.toString());
-					break;
-				case Indirect_Object:
-					p.setIndirectObject(w.toString());
-					break;
+//				case Compliment:
+//					p.setComplement(w.toString());
+//					break;
+//				case Indirect_Object:
+//					p.setIndirectObject(w.toString());
+//					break;
 				default:
 					break;
 			}
