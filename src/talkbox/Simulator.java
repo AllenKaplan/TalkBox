@@ -1,7 +1,12 @@
 package talkbox;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +40,7 @@ public class Simulator extends Application {
 	private List<Word> verbs = new ArrayList<Word>();
 	
 	//custom audio sets
-	public File[] audioSet;
+	private File[] audioSet;
 	private List<Button> custom;
 
 	// SimpleNLG interface
@@ -48,27 +53,55 @@ public class Simulator extends Application {
 	//ComboBoxes
 	private List<ComboBox<Word>> verbiage;
 	
-	//buttons
-	ToggleButton questionToggleButton;
-	
 	//current clip playing
-	Clip currentClip;
+	private Clip currentClip;
 	
 	@Override
-	public void start(Stage primaryStage) throws MaryConfigurationException, LineUnavailableException {
+	public void init() {
 		currentSentence = new Sentence();
-		marytts = new LocalMaryInterface();
 		verbiage = new ArrayList<ComboBox<Word>>();
 		custom = new ArrayList<Button>();
 		sentenceLabel = new Label();
-		currentClip = AudioSystem.getClip();
-		currentClip.addLineListener(event -> {
-		    if(LineEvent.Type.STOP.equals(event.getType())) {
-		    	currentClip.close();
-		    }
-		});
-		
-		/* element generation */
+		try {
+			marytts = new LocalMaryInterface();
+			currentClip = AudioSystem.getClip();
+			currentClip.addLineListener(event -> {
+				if(LineEvent.Type.STOP.equals(event.getType())) {
+					currentClip.close();
+				}
+			});
+		}
+		catch (MaryConfigurationException | LineUnavailableException e) {
+			System.err.println("ERROR GENERATING AUDIO PLAYBACK");
+		}
+		try {
+			FileInputStream file = new FileInputStream("TalkBoxData/Settings/settings.tbc");
+			ObjectInputStream in = new ObjectInputStream(file); 
+			Settings settings = (Settings) in.readObject();
+			file.close();
+			in.close();
+			
+			if (settings.getRelativePathToAudioFiles() != null)
+				this.audioSet = settings.getRelativePathToAudioFiles().toFile().listFiles();
+			else
+				this.audioSet = new File[0];
+			
+			if (settings.getDictionaryPath() != null)
+				this.loadDictionary(settings.getDictionaryPath());
+		}
+		catch (IOException | ClassNotFoundException e) {
+			System.err.println("ERROR LOADING SETTINGS\nLOADING DEFUALT SETTINGS ...");
+			e.printStackTrace();
+			this.audioSet = new File[0];
+		}
+	}
+	
+	public static void main(String[] args) {
+		Application.launch(args);
+	}
+	
+	@Override
+	public void start(Stage primaryStage) throws MaryConfigurationException, LineUnavailableException {
 		sentenceLabel.setText("\"" + currentSentence.getConstructedScentence() + "\"");
 
 		addVerbiage("Subject", subjects);
@@ -76,8 +109,7 @@ public class Simulator extends Application {
 		addVerbiage("Object", objects);
 		
 		for (File f : audioSet) {
-			if (custom.size() < Configuration.MAX_CUSTOM_AUDIO_BUTTONS)
-				addAudioButton(f);
+			addAudioButton(f);
 		}
 
 		ToggleButton questionToggleButton = new ToggleButton("Question?");
@@ -114,6 +146,11 @@ public class Simulator extends Application {
 				System.err.println("ERROR GENERATING SPEECH");
 			} 
 		});
+		
+//		Button swapAudioSets = new Button("Swap");
+//		swapAudioSets.setOnAction(value -> {
+//			
+//		});
 
 		/* construct scene from elements */
 		HBox verbiageBox = new HBox();
@@ -125,7 +162,6 @@ public class Simulator extends Application {
 		selectionsBox.getChildren().add(tenseBox);
 		selectionsBox.getChildren().add(playButton);
 		
-		
 		VBox vbox = new VBox(sentenceLabel, verbiageBox, selectionsBox, customAudioBox);
 		Scene scene = new Scene(vbox);
 
@@ -134,24 +170,6 @@ public class Simulator extends Application {
 		primaryStage.sizeToScene();
 		primaryStage.show();
 	}// end start
-
-	public void addWord(Word word) {
-		switch (word.getPartOfSpeech()) {
-		case Subject:
-			if (!subjects.contains(word)) 
-				subjects.add(word);
-			break;
-		case Object:
-			if (!objects.contains(word))
-				objects.add(word);
-			break;
-		case Verb:
-			if (!verbs.contains(word))
-				verbs.add(word);
-			break;
-		default:
-		}
-	}
 	
 	public void addAudioButton(File audio) {
 		Button customAudio = new Button(audio.getName().substring(0, audio.getName().indexOf('.')));
@@ -176,6 +194,29 @@ public class Simulator extends Application {
 			sentenceLabel.setText("\"" + currentSentence.getConstructedScentence() + "\"");
 		});
 		verbiage.add(cb);
+	}
+	
+	private void loadDictionary(Path dictionaryPath) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader(dictionaryPath.toFile()));
+		while (br.ready()) {
+			String next = br.readLine().trim();
+			switch (next) {
+			case "SUBJECTS":
+				while (br.ready() && !(next = br.readLine().trim()).isEmpty())
+					subjects.add(new Word(next, Part_Of_Speech.Subject, Phrase_Type.Noun));
+				break;
+			case "OBJECTS":
+				while (br.ready() && !(next = br.readLine().trim()).isEmpty())
+					objects.add(new Word(next, Part_Of_Speech.Object, Phrase_Type.Noun));
+				break;
+			case "VERBS":
+				while (br.ready() && !(next = br.readLine().trim()).isEmpty())
+					verbs.add(new Word(next, Part_Of_Speech.Verb, Phrase_Type.Verb));
+				break;
+			default:
+			}
+		}
+		br.close();
 	}
 	
 }
