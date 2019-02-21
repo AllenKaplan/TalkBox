@@ -2,13 +2,10 @@ package talkbox;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import javafx.application.Application;
@@ -34,10 +31,8 @@ public class Configurator extends Application {
 
 	@Override
 	public void init() {
-		//attemp to load old settings
 		dictionaryPathTxt = new Label("");
 		audioPathTxt = new Label("");
-		
 		try {
 			FileInputStream file = new FileInputStream("TalkBoxData/Settings/settings.tbc");
 			ObjectInputStream in = new ObjectInputStream(file); 

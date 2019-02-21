@@ -146,11 +146,6 @@ public class Simulator extends Application {
 				System.err.println("ERROR GENERATING SPEECH");
 			} 
 		});
-		
-//		Button swapAudioSets = new Button("Swap");
-//		swapAudioSets.setOnAction(value -> {
-//			
-//		});
 
 		/* construct scene from elements */
 		HBox verbiageBox = new HBox();
