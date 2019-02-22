@@ -146,6 +146,18 @@ public class Simulator extends Application {
 				System.err.println("ERROR GENERATING SPEECH");
 			} 
 		});
+		
+		Button launch = new Button("Launch Configurator");
+		launch.setOnAction(value -> {
+			try {
+				@SuppressWarnings("unused")
+				Process proc = Runtime.getRuntime().exec("java -jar Configurator.jar");
+				System.exit(0);
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+		});
 
 		/* construct scene from elements */
 		HBox verbiageBox = new HBox();
@@ -157,7 +169,7 @@ public class Simulator extends Application {
 		selectionsBox.getChildren().add(tenseBox);
 		selectionsBox.getChildren().add(playButton);
 		
-		VBox vbox = new VBox(sentenceLabel, verbiageBox, selectionsBox, customAudioBox);
+		VBox vbox = new VBox(sentenceLabel, verbiageBox, selectionsBox, customAudioBox, launch);
 		Scene scene = new Scene(vbox);
 
 		primaryStage.setTitle("TalkBox TTS Prototype");
