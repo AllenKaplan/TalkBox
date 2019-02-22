@@ -1,6 +1,9 @@
-# TalkBox
+## TalkBox
+The TalkBox simulator and configuration apps are derived from the TalkBox Community Research Project, which has been undertaken by faculty and students of the Lassonde School of Engineering at York University to provide a low-cost open-source, open-hardware Speech Generating Device for those who need such devices. 
 
-TalkBox is a ...
+## Getting Started
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+
 
 ## Installation
 
@@ -25,12 +28,27 @@ TalkBox Configuration Interface?
 ## Tests
 Describe and show how to run the tests with code examples.
 
+## Deployment
+Add additional notes about how to deploy this on a live system
+
+## Built With
+•	Maven - Dependency Management
+More incoming...
+
 ## Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
+Please read CONTRIBUTING.md for details on our code of conduct, and the process for submitting pull requests to us.
 
 ## License
+This project is licensed under the MIT License - see the LICENSE.md file for details
 
-Should we have one ... ?
+## Authors
+•	Matt Walker 
+•	Allen Kaplan
+•	Sadman Sakib
+
+## Acknowledgments
+[1]"proj [EECS2311]", Wiki.eecs.yorku.ca, 2019. [Online]. Available: https://wiki.eecs.yorku.ca/course_archive/2018-19/W/2311/proj. [Accessed: 04- Feb- 2019]. 
+[2]Ehud Reiter. "SimpleNLG”, GitHub, 2019. [Online]. Available: https://github.com/simplenlg/simplenlg. [Accessed: 04- Feb- 2019]. 
+[3]DFKI’s Language Technology Lab and the Institute of Phonetics at Saarland University."marytts/marytts", GitHub, 2019. [Online]. Available: https://github.com/marytts/marytts. [Accessed: 04- Feb- 2019]. 
+[4]"The TalkBox Community Research Project", Talkbox.apps01.yorku.ca, 2019. [Online]. Available: http://talkbox.apps01.yorku.ca/. [Accessed: 04- Feb- 2019]. 
+
