@@ -1,4 +1,4 @@
-package talkbox;
+package Simulator;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,6 +31,8 @@ import marytts.MaryInterface;
 import marytts.exceptions.MaryConfigurationException;
 import marytts.exceptions.SynthesisException;
 import simplenlg.features.Tense;
+
+import talkbox.*;
 
 public class Simulator extends Application {
 

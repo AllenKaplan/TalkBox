@@ -1,4 +1,4 @@
-package talkbox;
+package Simulator;
 
 import simplenlg.features.Feature;
 import simplenlg.features.InterrogativeType;

@@ -1,4 +1,4 @@
-package talkbox;
+package Configurator;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,6 +19,8 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+
+import talkbox.*;
 
 public class Configurator extends Application {
 	
