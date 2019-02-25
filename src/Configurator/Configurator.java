@@ -28,12 +28,6 @@ public class Configurator extends Application {
 	private Label audioPathTxt;
 
 	public static void main(String[] args) {
-		try {
-			Runtime.getRuntime().exec(args);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		Application.launch(args);
 	}
 
