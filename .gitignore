@@ -4,7 +4,7 @@ bin/
 tmp/
 log/
 Documentation/
-target/
+target/*
 *.tmp
 *.bak
 *.swp
