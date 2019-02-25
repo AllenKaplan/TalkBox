@@ -16,5 +16,14 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/mattw/.m2/repository/com/ibm/icu/icu4j/54.1.1/icu4j-54.1.1.jar" sourcepath="C:/Users/mattw/.m2/repository/com/ibm/icu/icu4j/54.1.1/icu4j-54.1.1-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="com.ibm.icu"/>
+			<attribute name="maven.artifactId" value="icu4j"/>
+			<attribute name="maven.version" value="54.1.1"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

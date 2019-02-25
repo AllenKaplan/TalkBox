@@ -1,4 +1,4 @@
-package talkbox;
+package Simulator;
 
 public class Word {
 	

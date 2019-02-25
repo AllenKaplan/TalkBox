@@ -1,4 +1,4 @@
-package talkbox;
+package Configurator;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -19,6 +19,8 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+
+import talkbox.*;
 
 public class Configurator extends Application {
 	
@@ -95,20 +97,35 @@ public class Configurator extends Application {
 	            out.writeObject(settings);
 	            out.close();
 	            file.close();
-	            if (primaryStage.getTitle().charAt(primaryStage.getTitle().length()-1) == '*')
+	            if (primaryStage.getTitle().charAt(primaryStage.getTitle().length()-1) == '*') {
 	            	primaryStage.setTitle(primaryStage.getTitle().substring(0, primaryStage.getTitle().length()-1));
-	            saveTxt.setText("Your changes have been saved!");
+	            	saveTxt.setText("Your changes have been saved!");
+	            }
+	            else
+	            	saveTxt.setText("No changes to save!");
 			}
 			catch (IOException e) {
 				System.err.println("COULD NOT SAVE");
 			}
 		});
+		
+		Button launch = new Button("Launch Simulator");
+		launch.setOnAction(value -> {
+			try {
+				@SuppressWarnings("unused")
+				Process proc = Runtime.getRuntime().exec("java -jar Simulator.jar");
+				System.exit(0);
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+		});
 
-		HBox launcherBox = new HBox(save, saveTxt);
-		launcherBox.setSpacing(20);
+		HBox saveBox = new HBox(save, saveTxt);
+		saveBox.setSpacing(20);
 		HBox dictionaryBox = new HBox(loadDictionary, dictionaryPathTxt);
 		HBox audioBox = new HBox(loadAudio, audioPathTxt);
-		VBox group = new VBox(dictionaryBox, audioBox, launcherBox);
+		VBox group = new VBox(dictionaryBox, audioBox, saveBox, launch);
 		Scene scene = new Scene(group);
 
 		primaryStage.setTitle("TalkBox TTS Configuration");
