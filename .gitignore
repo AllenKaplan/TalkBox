@@ -14,6 +14,7 @@ local.properties
 .loadpath
 .recommenders
 pom.xml
+TalkBox_Prototype_v1.0-alpha
 
 # External tool builders
 .externalToolBuilders/
