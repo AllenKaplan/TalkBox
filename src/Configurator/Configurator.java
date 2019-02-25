@@ -28,6 +28,12 @@ public class Configurator extends Application {
 	private Label audioPathTxt;
 
 	public static void main(String[] args) {
+		try {
+			Runtime.getRuntime().exec(args);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		Application.launch(args);
 	}
 
@@ -35,7 +41,11 @@ public class Configurator extends Application {
 	public void init() {
 		dictionaryPathTxt = new Label("");
 		audioPathTxt = new Label("");
+		
 		try {
+			File filepath = new File("TalkBoxData/Settings");
+			if (!filepath.exists())
+				filepath.mkdirs();
 			FileInputStream file = new FileInputStream("TalkBoxData/Settings/settings.tbc");
 			ObjectInputStream in = new ObjectInputStream(file); 
 			Settings settings = (Settings) in.readObject();
@@ -62,6 +72,9 @@ public class Configurator extends Application {
 		loadDictionary.setOnAction(value -> {
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Select Dictionary");
+			File filepath = new File("TalkBoxData/Resources/Dictionaries");
+			if (!filepath.exists())
+				filepath.mkdirs();
 			fileChooser.setInitialDirectory(Paths.get("TalkBoxData/Resources/Dictionaries").toFile());
 			fileChooser.setSelectedExtensionFilter(new ExtensionFilter("Text Files", "*.txt"));
 			File selectedFile = fileChooser.showOpenDialog(primaryStage);
@@ -78,6 +91,9 @@ public class Configurator extends Application {
 		loadAudio.setOnAction(value -> {
 			DirectoryChooser  directoryChooser  = new DirectoryChooser();
 			directoryChooser.setTitle("Select Audio Set");
+			File filepath = new File("TalkBoxData/Resources/AudioFiles");
+			if (!filepath.exists())
+				filepath.mkdirs();
 			directoryChooser.setInitialDirectory(Paths.get("TalkBoxData/Resources/AudioFiles").toFile());
 			File selectedFile = directoryChooser.showDialog(primaryStage);
 			if (selectedFile != null) {
