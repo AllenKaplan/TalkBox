@@ -1,4 +1,4 @@
-## TalkBox
+# TalkBox
 The TalkBox simulator and configuration apps are derived from the TalkBox Community Research Project, which has been undertaken by faculty and students of the Lassonde School of Engineering at York University to provide a low-cost open-source, open-hardware Speech Generating Device for those who need such devices. 
 
 ## Getting Started
