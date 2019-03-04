@@ -62,12 +62,12 @@ public class Sentence {
 				case Object:
 					p.setObject(w.toString());
 					break;
-//				case Compliment:
-//					p.setComplement(w.toString());
-//					break;
-//				case Indirect_Object:
-//					p.setIndirectObject(w.toString());
-//					break;
+				case Compliment:
+					p.setComplement(w.toString());
+					break;
+				case Indirect_Object:
+					p.setIndirectObject(w.toString());
+					break;
 				default:
 					break;
 			}

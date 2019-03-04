@@ -34,6 +34,7 @@ import simplenlg.features.Tense;
 
 import talkbox.*;
 
+@SuppressWarnings("restriction")
 public class Simulator extends Application {
 
 	// talk box interface attributes
@@ -221,6 +222,14 @@ public class Simulator extends Application {
 			case "VERBS":
 				while (br.ready() && !(next = br.readLine().trim()).isEmpty())
 					verbs.add(new Word(next, Part_Of_Speech.Verb, Phrase_Type.Verb));
+				break;
+			case "INDIRECT_OBJECT":
+				while (br.ready() && !(next = br.readLine().trim()).isEmpty())
+					verbs.add(new Word(next, Part_Of_Speech.Indirect_Object, Phrase_Type.Noun));
+				break;
+			case "COMPLIMENT":
+				while (br.ready() && !(next = br.readLine().trim()).isEmpty())
+					verbs.add(new Word(next, Part_Of_Speech.Compliment, Phrase_Type.Adjective));
 				break;
 			default:
 			}
