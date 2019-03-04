@@ -1,4 +1,4 @@
-package Simulator;
+package simulator;
 
 import simplenlg.features.Feature;
 import simplenlg.features.InterrogativeType;

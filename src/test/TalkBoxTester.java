@@ -10,7 +10,7 @@ import java.util.Collection;
 
 import org.junit.Test;
 
-import Simulator.Simulator;
+import simulator.Simulator;
 
 
 public class TalkBoxTester {

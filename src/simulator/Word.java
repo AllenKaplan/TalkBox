@@ -1,4 +1,4 @@
-package Simulator;
+package simulator;
 
 public class Word {
 	

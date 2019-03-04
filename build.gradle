@@ -38,9 +38,15 @@ publishing {
     
     // Tasks
     
-jar {
+jarConfigurator {
 	manifest {
 		attributes 'Main-Class': 'Configurator.java.TalkBox.Configurator'
+	}
+}
+
+jarSimulator {
+	manifest {
+		attributes 'Main-Class': 'Simulator.java.TalkBox.Simulator'
 	}
 }
 }// Define the main class for the application

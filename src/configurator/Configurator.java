@@ -1,4 +1,4 @@
-package Configurator;
+package configurator;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,7 +21,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 import talkbox.*;
-
+@SuppressWarnings("restriction")
 public class Configurator extends Application {
 	
 	private Label dictionaryPathTxt;
@@ -31,6 +31,7 @@ public class Configurator extends Application {
 		Application.launch(args);
 	}
 
+	
 	@Override
 	public void init() {
 		dictionaryPathTxt = new Label("");
