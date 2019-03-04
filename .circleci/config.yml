@@ -39,3 +39,22 @@ jobs:
 
       # run tests!
       - run: mvn integration-test
+      
+      - run: 
+          name: "Build and Publish Release on GitHub"
+          command: |
+            NOW="$(date)" 
+            ZIP_FILE_NAME=TalkBox
+            TAG=Release-$(date '+%Y-%m-%d-%H-%M-%S')
+            
+            cd ./build/libs/
+            zip ${ZIP_FILE_NAME}.zip TalkBox.jar 
+            github-release upload --token ${GITHUB_TOKEN} --owner ${PROJECT_USERNAME} --repo ${PROJECT_REPONAME} --tag ${TAG} --name ${TAG} --body "Release date: ${NOW}" ${ZIP_FILE_NAME}.zip
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master 
