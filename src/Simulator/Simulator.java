@@ -227,7 +227,7 @@ public class Simulator extends Application {
 				while (br.ready() && !(next = br.readLine().trim()).isEmpty())
 					verbs.add(new Word(next, Part_Of_Speech.Indirect_Object, Phrase_Type.Noun));
 				break;
-			case "COMPLIMENT":
+			case "COMPLIMENTS":
 				while (br.ready() && !(next = br.readLine().trim()).isEmpty())
 					verbs.add(new Word(next, Part_Of_Speech.Compliment, Phrase_Type.Adjective));
 				break;
