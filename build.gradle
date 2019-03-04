@@ -35,4 +35,13 @@ publishing {
             from(components.java)
         }
     }
+    
+    // Tasks
+    
+jar {
+	manifest {
+		attributes 'Main-Class': 'main.java.TalkBox.Configurator'
+	}
 }
+}// Define the main class for the application
+mainClassName = 'TalkBox.Configurator'
