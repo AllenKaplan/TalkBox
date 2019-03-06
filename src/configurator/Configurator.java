@@ -7,12 +7,18 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
+import java.util.TreeMap;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
@@ -21,19 +27,22 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 import talkbox.*;
-@SuppressWarnings("restriction")
+
 public class Configurator extends Application {
 	
 	private Label dictionaryPathTxt;
 	private Label audioPathTxt;
+	TreeMap<String, String> fileMap;
+	ObservableMap<String, String> observableFileMap;
 
 	public static void main(String[] args) {
 		Application.launch(args);
 	}
 
-	
 	@Override
 	public void init() {
+		fileMap = new TreeMap<String, String>();
+		observableFileMap = FXCollections.observableMap(fileMap);
 		dictionaryPathTxt = new Label("");
 		audioPathTxt = new Label("");
 		
@@ -50,8 +59,12 @@ public class Configurator extends Application {
 			if (settings.getDictionaryPath() != null)
 				dictionaryPathTxt = new Label(settings.getDictionaryPath().toString());
 			
-			if (settings.getRelativePathToAudioFiles() != null)
+			if (settings.getRelativePathToAudioFiles() != null) {
 				audioPathTxt = new Label(settings.getRelativePathToAudioFiles().toString());
+				for (File f : settings.getRelativePathToAudioFiles().toFile().listFiles()) {
+					fileMap.put(f.getPath().toString(), f.getName());
+				}
+			}
 		}
 		catch (IOException | ClassNotFoundException e) {
 			System.err.println("ERROR LOADING PREVIOUS SETTINGS");
@@ -61,6 +74,13 @@ public class Configurator extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		Label saveTxt = new Label("");
+		
+		Button editAudioSet = new Button("Edit AudioSet");
+		editAudioSet.setDisable(audioPathTxt.getText().isEmpty());
+		editAudioSet.setOnAction(value -> {
+			this.displayEditWindow();
+			primaryStage.setTitle(primaryStage.getTitle() + '*');
+		});
 		
 		Button loadDictionary = new Button("Load Custom Dictionary");
 		loadDictionary.setTooltip(new Tooltip("Select path to a dictionary\nor leave blank for default"));
@@ -96,13 +116,17 @@ public class Configurator extends Application {
 				audioPathTxt.setText(selectedFile.getPath());
 				primaryStage.setTitle(primaryStage.getTitle() + '*');
 				primaryStage.sizeToScene();
+				for (File f : selectedFile.listFiles()) {
+					fileMap.put(f.getPath().toString(), f.getName());
+				}
+				editAudioSet.setDisable(audioPathTxt.getText().isEmpty());
 			}
 		});
 		
 		Button save = new Button("Save Settings");
 		save.setOnAction(value -> {
 			try {
-				Settings settings = new Settings(dictionaryPathTxt.getText(), audioPathTxt.getText());
+				Settings settings = new Settings(dictionaryPathTxt.getText(), audioPathTxt.getText(), fileMap);
 	            FileOutputStream file = new FileOutputStream("TalkBoxData/Settings/settings.tbc"); 
 	            ObjectOutputStream out = new ObjectOutputStream(file);
 	            out.writeObject(settings);
@@ -136,13 +160,35 @@ public class Configurator extends Application {
 		saveBox.setSpacing(20);
 		HBox dictionaryBox = new HBox(loadDictionary, dictionaryPathTxt);
 		HBox audioBox = new HBox(loadAudio, audioPathTxt);
-		VBox group = new VBox(dictionaryBox, audioBox, saveBox, launch);
+		VBox group = new VBox(dictionaryBox, audioBox, editAudioSet, saveBox, launch);
 		Scene scene = new Scene(group);
 
 		primaryStage.setTitle("TalkBox TTS Configuration");
 		primaryStage.setScene(scene);
 		primaryStage.sizeToScene();
 		primaryStage.show();
+	}
+	
+	void displayEditWindow() {
+		Label editLabel = new Label("Double click any audiofile name to change it");
+		ListView<String> fileView = new ListView<>();
+		fileView.setEditable(true);
+		fileView.setCellFactory(TextFieldListCell.forListView());
+		fileView.setOnEditCommit(new EventHandler<ListView.EditEvent<String>>() {
+			@Override
+			public void handle(ListView.EditEvent<String> t) {
+				fileView.getItems().set(t.getIndex(), t.getNewValue());
+			}		
+		});
+		fileView.getItems().setAll(observableFileMap.values());
+		fileView.autosize();
+		Stage fileStage = new Stage();
+		VBox fileBox = new VBox(editLabel, fileView);
+		fileBox.setSpacing(10);
+		fileStage.setTitle("Edit Audio Files");
+		fileStage.setScene(new Scene(fileBox));
+		fileStage.sizeToScene();
+		fileStage.show();
 	}
 
 }

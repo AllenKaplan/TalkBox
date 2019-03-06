@@ -3,6 +3,8 @@ package talkbox;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Settings implements TalkBoxConfiguration {
 	
@@ -16,9 +18,12 @@ public class Settings implements TalkBoxConfiguration {
 	private final int numOfAudioSets;
 	private final int totalNumOfButtons;
 	
-	public Settings(String dictionaryURL, String audioFilesURL) {
+	private final TreeMap<String, String> audioSetData;
+	
+	public Settings(String dictionaryURL, String audioFilesURL, TreeMap<String, String> audioSetData) {
 		this.dictionaryURL = dictionaryURL;
 		this.audioFilesURL = audioFilesURL;
+		this.audioSetData = audioSetData;
 		this.numOfAudioSets = (audioFilesURL.isEmpty()) ? 0 : Paths.get(audioFilesURL).toFile().listFiles().length;
 		this.numOfAudioButtons = NUM_AUDIO_BUTTONS;
 		this.totalNumOfButtons = NUM_MISC_BUTTONS + NUM_AUDIO_BUTTONS;
@@ -46,6 +51,10 @@ public class Settings implements TalkBoxConfiguration {
 	@Override
 	public Path getRelativePathToAudioFiles() {
 		return (this.audioFilesURL.isEmpty()) ? null : Paths.get(this.audioFilesURL);
+	}
+	
+	public TreeMap<String, String> getAudioSetData() {
+		return this.audioSetData;
 	}
 
 	@Override
