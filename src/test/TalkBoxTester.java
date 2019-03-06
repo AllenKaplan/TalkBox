@@ -18,12 +18,9 @@ public class TalkBoxTester {
 
 	@Test
 	public void CorrectDirectoryTest() {
-		Simulator sim = new Simulator();
+		//test
 	}
 
-	
-//	@Test(expected = IndexOutOfBoundsException.class)
-//	@Test(expected = FileNotFoundException.class)
 	@Test
 	public void AudioFilesFoundTest() {
 	}
