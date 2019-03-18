@@ -165,14 +165,18 @@ public class Simulator extends Application {
 		/* construct scene from elements */
 		HBox verbiageBox = new HBox();
 		verbiageBox.getChildren().addAll(verbiage);
+		verbiageBox.setSpacing(10);
 		HBox customAudioBox = new HBox();
+		customAudioBox.setSpacing(5);
 		customAudioBox.getChildren().addAll(custom);
 		HBox selectionsBox = new HBox();
+		selectionsBox.setSpacing(10);
 		selectionsBox.getChildren().add(questionToggleButton);
 		selectionsBox.getChildren().add(tenseBox);
 		selectionsBox.getChildren().add(playButton);
 		
 		VBox vbox = new VBox(sentenceLabel, verbiageBox, selectionsBox, customAudioBox, launch);
+		vbox.setSpacing(10);
 		Scene scene = new Scene(vbox);
 
 		primaryStage.setTitle("TalkBox TTS Prototype");
