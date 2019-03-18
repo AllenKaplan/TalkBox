@@ -3,7 +3,7 @@ package simulator;
 import javax.sound.sampled.*;
 import java.io.*;
 
-public class AudioRecord {
+public class RecordFunc {
 	
 	static final long RECORD_TIME = 60000;	
 
