@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import simulator.Simulator;
 
-
 public class TalkBoxTester {
 
 
@@ -26,10 +25,30 @@ public class TalkBoxTester {
 //	@Test(expected = FileNotFoundException.class)
 	@Test
 	public void AudioFilesFoundTest() {
+		
 	}
 	
 	@Test
 	public void PlaySimilAudioTest() {
 	}
+
+	@Test
+	public void EditAudioFileNameTest() {
+		
+	}
 	
+	@Test
+	public void AudioRecordedTest() {
+		
+	}
+	
+	@Test
+	public void SimulatorLaunchTest() {
+		
+	}
+	
+	@Test
+	public void ConfiguratorLaunchTest() {
+		
+	}
 }

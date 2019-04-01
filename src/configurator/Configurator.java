@@ -8,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
 import java.util.TreeMap;
+import javax.sound.sampled.LineUnavailableException;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -25,16 +26,24 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.layout.StackPane;
+import javax.sound.sampled.*;
+import java.io.*;
 import talkbox.*;
 
 public class Configurator extends Application {
 	
+	private static final int RECORD_TIME = 10000;   // 60 seconds 
 	private Label dictionaryPathTxt;
 	private Label audioPathTxt;
 	TreeMap<String, String> fileMap;
 	ObservableMap<String, String> observableFileMap;
 
+	
+	
+	
 	public static void main(String[] args) {
 		Application.launch(args);
 	}
@@ -125,6 +134,7 @@ public class Configurator extends Application {
 		
 		Button save = new Button("Save Settings");
 		save.setOnAction(value -> {
+			
 			try {
 				Settings settings = new Settings(dictionaryPathTxt.getText(), audioPathTxt.getText(), fileMap);
 	            FileOutputStream file = new FileOutputStream("TalkBoxData/Settings/settings.tbc"); 
@@ -156,11 +166,88 @@ public class Configurator extends Application {
 			}
 		});
 
+		
+		Button btn1  = new Button("Start Audio Recording");
+	    btn1.setOnAction(new EventHandler<ActionEvent>() {
+	        @Override
+	        public void handle(ActionEvent event) {
+	        	String homeDirectory = System.getProperty("user.dir" );
+	        	File wavFile = new File("TalkBoxData/Resources/AudioFiles/AudioRecordings/Record1.wav");
+	        	final Recorder recorder = new Recorder();
+	            
+	            // create a separate thread for recording
+	            Thread recordThread = new Thread(new Runnable() {
+	                @Override
+	                public void run() {
+	                    try {
+	                        System.out.println("Start recording...");
+	                        recorder.start();
+	                    } catch (LineUnavailableException ex) {
+	                        ex.printStackTrace();
+	                        System.exit(-1);
+	                    }              
+	                }
+	            });
+	             
+	            recordThread.start();
+	             
+	            try {
+	                Thread.sleep(RECORD_TIME);
+	            } catch (InterruptedException ex) {
+	                ex.printStackTrace();
+	            }
+	             
+	            try {
+	                recorder.stop();
+	                recorder.save(wavFile);
+	                System.out.println("STOPPED");
+	            } catch (IOException ex) {
+	                ex.printStackTrace();
+	            }
+	             
+	            System.out.println("DONE");
+	        }
+	        
+	            
+	        // End handle(ActionEvent event)
+	     });// End anonymous class
+	
+	    Button btn2  = new Button("Stop Recording & Save");
+	    btn2.setOnAction(new EventHandler<ActionEvent>() {
+	    	@Override
+	    	public void handle(ActionEvent event) {
+	    	Recorder obj = new Recorder();	
+	    	File wavFile = new File("TalkBoxData/Resources/AudioFiles/AudioRecordings/Record.wav");
+	    	try {
+                obj.stop();
+                obj.save(wavFile);
+                System.out.println("STOPPED");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+             
+            System.out.println("DONE");
+        }
+	    
+	      // End handle(ActionEvent event)
+	     });// End anonymous class
+	   
+
+        
+        StackPane root = new StackPane();
+        root.getChildren().add(btn1);
+        StackPane root2 = new StackPane();
+        root2.getChildren().add(btn2);
+  
+        //primaryStage.setScene(new Scene(root, 300, 250));
+        //primaryStage.show();
+		
+		
 		HBox saveBox = new HBox(save, saveTxt);
 		saveBox.setSpacing(20);
 		HBox dictionaryBox = new HBox(loadDictionary, dictionaryPathTxt);
 		HBox audioBox = new HBox(loadAudio, audioPathTxt);
-		VBox group = new VBox(dictionaryBox, audioBox, editAudioSet, saveBox, launch);
+		VBox group = new VBox(dictionaryBox, audioBox, editAudioSet, saveBox, launch,root,root2);
 		Scene scene = new Scene(group);
 
 		primaryStage.setTitle("TalkBox TTS Configuration");
