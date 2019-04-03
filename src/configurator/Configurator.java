@@ -8,6 +8,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Paths;
 import java.util.TreeMap;
+import java.util.logging.Level;
+
 import javax.sound.sampled.LineUnavailableException;
 
 import javafx.application.Application;
@@ -26,6 +28,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import log.log;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.StackPane;
@@ -45,7 +48,10 @@ public class Configurator extends Application {
 	
 	
 	public static void main(String[] args) {
+		log.resetLogger();
 		Application.launch(args);
+		
+		
 	}
 
 	@Override
@@ -85,7 +91,7 @@ public class Configurator extends Application {
 		Label saveTxt = new Label("");
 		
 		Button editAudioSet = new Button("Edit AudioSet");
-		Log.getLogger().log(Level.FINE, "Edit AudioSet");
+		log.getLogger().log(Level.FINE, "Edit AudioSet");
 		editAudioSet.setDisable(audioPathTxt.getText().isEmpty());
 		editAudioSet.setOnAction(value -> {
 			this.displayEditWindow();
@@ -93,7 +99,7 @@ public class Configurator extends Application {
 		});
 		
 		Button loadDictionary = new Button("Load Custom Dictionary");
-		Log.getLogger().log(Level.FINE, "Pressed Load Custom Dictionary");
+		log.getLogger().log(Level.FINE, "Pressed Load Custom Dictionary");
 		loadDictionary.setTooltip(new Tooltip("Select path to a dictionary\nor leave blank for default"));
 		loadDictionary.setOnAction(value -> {
 			FileChooser fileChooser = new FileChooser();
@@ -113,7 +119,7 @@ public class Configurator extends Application {
 		});
 		
 		Button loadAudio = new Button("Load Audio Set");
-		Log.getLogger().log(Level.FINE, "loadAudio");
+		log.getLogger().log(Level.FINE, "loadAudio");
 		loadAudio.setTooltip(new Tooltip("Select path to an audioset\nor leave blank for none"));
 		loadAudio.setOnAction(value -> {
 			DirectoryChooser  directoryChooser  = new DirectoryChooser();
@@ -136,7 +142,7 @@ public class Configurator extends Application {
 		});
 		
 		Button save = new Button("Save Settings");
-		Log.getLogger().log(Level.FINE, "Save Settings");
+		log.getLogger().log(Level.FINE, "Save Settings");
 		save.setOnAction(value -> {
 			
 			try {
@@ -159,7 +165,7 @@ public class Configurator extends Application {
 		});
 		
 		Button launch = new Button("Launch Simulator");
-		Log.getLogger().log(Level.FINE, "Launch Simulator");
+		log.getLogger().log(Level.FINE, "Launch Simulator");
 		launch.setOnAction(value -> {
 			try {
 				@SuppressWarnings("unused")
@@ -173,7 +179,7 @@ public class Configurator extends Application {
 
 		
 		Button btn1  = new Button("Start Audio Recording");
-		Log.getLogger().log(Level.FINE, "Record Audio");
+		log.getLogger().log(Level.FINE, "Record Audio");
 	    btn1.setOnAction(new EventHandler<ActionEvent>() {
 	        @Override
 	        public void handle(ActionEvent event) {
@@ -254,7 +260,7 @@ public class Configurator extends Application {
 		saveBox.setSpacing(20);
 		HBox dictionaryBox = new HBox(loadDictionary, dictionaryPathTxt);
 		HBox audioBox = new HBox(loadAudio, audioPathTxt);
-		VBox group = new VBox(dictionaryBox, audioBox, editAudioSet, saveBox, launch,root,/*root2*/);
+		VBox group = new VBox(dictionaryBox, audioBox, editAudioSet, saveBox, launch,root/*root2*/);
 		Scene scene = new Scene(group);
 
 		primaryStage.setTitle("TalkBox TTS Configuration");
