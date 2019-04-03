@@ -1,10 +1,12 @@
+package log;
+
 import java.io.IOException;
 import java.util.logging.*;
 
 
 
-public class Log {
-	private final static Logger logr = Logger.getLogger(Log.class.getName());
+public class log {
+	private final static Logger logr = Logger.getLogger(log.class.getName());
 	
 	public static Logger getLogger()
 	{
@@ -31,3 +33,4 @@ public class Log {
 		}
 
 	}
+}
