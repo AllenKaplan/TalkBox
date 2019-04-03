@@ -85,6 +85,7 @@ public class Configurator extends Application {
 		Label saveTxt = new Label("");
 		
 		Button editAudioSet = new Button("Edit AudioSet");
+		Log.getLogger().log(Level.FINE, "Edit AudioSet");
 		editAudioSet.setDisable(audioPathTxt.getText().isEmpty());
 		editAudioSet.setOnAction(value -> {
 			this.displayEditWindow();
@@ -92,6 +93,7 @@ public class Configurator extends Application {
 		});
 		
 		Button loadDictionary = new Button("Load Custom Dictionary");
+		Log.getLogger().log(Level.FINE, "Pressed Load Custom Dictionary");
 		loadDictionary.setTooltip(new Tooltip("Select path to a dictionary\nor leave blank for default"));
 		loadDictionary.setOnAction(value -> {
 			FileChooser fileChooser = new FileChooser();
@@ -111,6 +113,7 @@ public class Configurator extends Application {
 		});
 		
 		Button loadAudio = new Button("Load Audio Set");
+		Log.getLogger().log(Level.FINE, "loadAudio");
 		loadAudio.setTooltip(new Tooltip("Select path to an audioset\nor leave blank for none"));
 		loadAudio.setOnAction(value -> {
 			DirectoryChooser  directoryChooser  = new DirectoryChooser();
@@ -133,6 +136,7 @@ public class Configurator extends Application {
 		});
 		
 		Button save = new Button("Save Settings");
+		Log.getLogger().log(Level.FINE, "Save Settings");
 		save.setOnAction(value -> {
 			
 			try {
@@ -155,6 +159,7 @@ public class Configurator extends Application {
 		});
 		
 		Button launch = new Button("Launch Simulator");
+		Log.getLogger().log(Level.FINE, "Launch Simulator");
 		launch.setOnAction(value -> {
 			try {
 				@SuppressWarnings("unused")
@@ -168,6 +173,7 @@ public class Configurator extends Application {
 
 		
 		Button btn1  = new Button("Start Audio Recording");
+		Log.getLogger().log(Level.FINE, "Record Audio");
 	    btn1.setOnAction(new EventHandler<ActionEvent>() {
 	        @Override
 	        public void handle(ActionEvent event) {
@@ -212,7 +218,7 @@ public class Configurator extends Application {
 	        // End handle(ActionEvent event)
 	     });// End anonymous class
 	
-	    Button btn2  = new Button("Stop Recording & Save");
+	    /*Button btn2  = new Button("Stop Recording & Save");
 	    btn2.setOnAction(new EventHandler<ActionEvent>() {
 	    	@Override
 	    	public void handle(ActionEvent event) {
@@ -231,13 +237,14 @@ public class Configurator extends Application {
 	    
 	      // End handle(ActionEvent event)
 	     });// End anonymous class
+	     */
 	   
 
         
         StackPane root = new StackPane();
         root.getChildren().add(btn1);
-        StackPane root2 = new StackPane();
-        root2.getChildren().add(btn2);
+        //StackPane root2 = new StackPane();
+       // root2.getChildren().add(btn2);
   
         //primaryStage.setScene(new Scene(root, 300, 250));
         //primaryStage.show();
@@ -247,7 +254,7 @@ public class Configurator extends Application {
 		saveBox.setSpacing(20);
 		HBox dictionaryBox = new HBox(loadDictionary, dictionaryPathTxt);
 		HBox audioBox = new HBox(loadAudio, audioPathTxt);
-		VBox group = new VBox(dictionaryBox, audioBox, editAudioSet, saveBox, launch,root,root2);
+		VBox group = new VBox(dictionaryBox, audioBox, editAudioSet, saveBox, launch,root,/*root2*/);
 		Scene scene = new Scene(group);
 
 		primaryStage.setTitle("TalkBox TTS Configuration");
