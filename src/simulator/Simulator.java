@@ -116,6 +116,7 @@ public class Simulator extends Application {
 		}
 
 		ToggleButton questionToggleButton = new ToggleButton("Question?");
+		log.getLogger().log(Level.FINE, "Question?");
 		questionToggleButton.setOnAction(value -> {
 			currentSentence.setQuestion(questionToggleButton.isSelected());
 			sentenceLabel.setText("\"" + currentSentence.getConstructedScentence() + "\"");
@@ -123,6 +124,7 @@ public class Simulator extends Application {
 
 		ComboBox<String> tenseBox = new ComboBox<String>(FXCollections.observableArrayList(currentSentence.getTenses()));
 		tenseBox.setPromptText("Select Tense");
+		log.getLogger().log(Level.FINE, "Select Tense");
 		tenseBox.setOnAction(value -> {
 			switch (tenseBox.getValue()) {
 			case "Past":
@@ -139,6 +141,7 @@ public class Simulator extends Application {
 		});
 
 		Button playButton = new Button("PLAY");
+		log.getLogger().log(Level.FINE, "PLAY);
 		playButton.setOnAction(value -> {
 			try {
 				if (currentClip.isOpen())
@@ -151,6 +154,7 @@ public class Simulator extends Application {
 		});
 		
 		Button launch = new Button("Launch Configurator");
+		log.getLogger().log(Level.FINE, "Configurator launched");
 		launch.setOnAction(value -> {
 			try {
 				@SuppressWarnings("unused")
