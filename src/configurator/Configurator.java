@@ -178,7 +178,7 @@ public class Configurator extends Application {
 		});
 
 		
-		Button btn1  = new Button("Start Audio Recording");
+		Button btn1  = new Button("Record Audio");
 		log.getLogger().log(Level.FINE, "Record Audio");
 	    btn1.setOnAction(new EventHandler<ActionEvent>() {
 	        @Override
