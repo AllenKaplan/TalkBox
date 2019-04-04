@@ -10,6 +10,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.logging.*;
+
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineEvent;
@@ -26,6 +28,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import log.log;
 import marytts.LocalMaryInterface;
 import marytts.MaryInterface;
 import marytts.exceptions.MaryConfigurationException;
@@ -101,6 +104,7 @@ public class Simulator extends Application {
 	
 	public static void main(String[] args) {
 		Application.launch(args);
+		log.resetLogger();
 	}
 	
 	@Override
@@ -141,7 +145,7 @@ public class Simulator extends Application {
 		});
 
 		Button playButton = new Button("PLAY");
-		log.getLogger().log(Level.FINE, "PLAY);
+		log.getLogger().log(Level.FINE, "PLAY");
 		playButton.setOnAction(value -> {
 			try {
 				if (currentClip.isOpen())
